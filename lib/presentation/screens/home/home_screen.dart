@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todos/presentation/bloc/edit_todo/edit_todo.dart';
-import 'package:flutter_todos/presentation/bloc/edit_todo/view/edit_todo_page.dart';
+import 'package:flutter_todos/presentation/screens/edit_todo/edit_todo_screen.dart';
 import 'package:flutter_todos/presentation/cubit/home/home.dart';
 import 'package:flutter_todos/presentation/cubit/stats/stats.dart';
 import 'package:flutter_todos/presentation/bloc/todos_overview/todos_overview.dart';

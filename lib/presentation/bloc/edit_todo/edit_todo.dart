@@ -1,2 +1,2 @@
-export 'bloc/edit_todo_bloc.dart';
-export 'view/edit_todo_page.dart';
+export 'edit_todo_bloc.dart';
+export '../../screens/edit_todo/edit_todo_screen.dart';
