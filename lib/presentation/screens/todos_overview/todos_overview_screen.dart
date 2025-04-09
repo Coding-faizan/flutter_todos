@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todos/presentation/screens/edit_todo/edit_todo_screen.dart';
-import 'package:flutter_todos/l10n/l10n.dart';
-import 'package:flutter_todos/presentation/bloc/todos_overview/todos_overview.dart';
-import 'package:todos_repository/todos_repository.dart';
+
+import '../../../data/models/todo.dart';
+import '../../../domain/repository/todos_repository.dart';
+import '../../../l10n/l10n.dart';
+import 'package:nested/nested.dart';
+import '../../bloc/todos_overview/todos_overview_bloc.dart';
+import '../../shared_widgets/todo_list_tile.dart';
+import '../../shared_widgets/todos_overview_filter_button.dart';
+import '../../shared_widgets/todos_overview_options_button.dart';
+import '../edit_todo/edit_todo_screen.dart';
 
 class TodosOverviewPage extends StatelessWidget {
   const TodosOverviewPage({super.key});
@@ -12,7 +18,7 @@ class TodosOverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TodosOverviewBloc(
+      create: (BuildContext context) => TodosOverviewBloc(
         todosRepository: context.read<TodosRepository>(),
       )..add(const TodosOverviewSubscriptionRequested()),
       child: const TodosOverviewView(),
@@ -25,22 +31,23 @@ class TodosOverviewView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
+    final AppLocalizations l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.todosOverviewAppBarTitle),
-        actions: const [
+        actions: const <Widget>[
           TodosOverviewFilterButton(),
           TodosOverviewOptionsButton(),
         ],
       ),
       body: MultiBlocListener(
-        listeners: [
+        listeners: <SingleChildWidget>[
           BlocListener<TodosOverviewBloc, TodosOverviewState>(
-            listenWhen: (previous, current) =>
-                previous.status != current.status,
-            listener: (context, state) {
+            listenWhen:
+                (TodosOverviewState previous, TodosOverviewState current) =>
+                    previous.status != current.status,
+            listener: (BuildContext context, TodosOverviewState state) {
               if (state.status == TodosOverviewStatus.failure) {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
@@ -53,12 +60,14 @@ class TodosOverviewView extends StatelessWidget {
             },
           ),
           BlocListener<TodosOverviewBloc, TodosOverviewState>(
-            listenWhen: (previous, current) =>
-                previous.lastDeletedTodo != current.lastDeletedTodo &&
-                current.lastDeletedTodo != null,
-            listener: (context, state) {
-              final deletedTodo = state.lastDeletedTodo!;
-              final messenger = ScaffoldMessenger.of(context);
+            listenWhen:
+                (TodosOverviewState previous, TodosOverviewState current) =>
+                    previous.lastDeletedTodo != current.lastDeletedTodo &&
+                    current.lastDeletedTodo != null,
+            listener: (BuildContext context, TodosOverviewState state) {
+              final Todo deletedTodo = state.lastDeletedTodo!;
+              final ScaffoldMessengerState messenger =
+                  ScaffoldMessenger.of(context);
               messenger
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
@@ -83,7 +92,7 @@ class TodosOverviewView extends StatelessWidget {
           ),
         ],
         child: BlocBuilder<TodosOverviewBloc, TodosOverviewState>(
-          builder: (context, state) {
+          builder: (BuildContext context, TodosOverviewState state) {
             if (state.todos.isEmpty) {
               if (state.status == TodosOverviewStatus.loading) {
                 return const Center(child: CupertinoActivityIndicator());
@@ -102,11 +111,11 @@ class TodosOverviewView extends StatelessWidget {
             return CupertinoScrollbar(
               child: ListView.builder(
                 itemCount: state.filteredTodos.length,
-                itemBuilder: (_, index) {
-                  final todo = state.filteredTodos.elementAt(index);
+                itemBuilder: (_, int index) {
+                  final Todo todo = state.filteredTodos.elementAt(index);
                   return TodoListTile(
                     todo: todo,
-                    onToggleCompleted: (isCompleted) {
+                    onToggleCompleted: (bool isCompleted) {
                       context.read<TodosOverviewBloc>().add(
                             TodosOverviewTodoCompletionToggled(
                               todo: todo,

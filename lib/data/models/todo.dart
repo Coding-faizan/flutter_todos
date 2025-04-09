@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
-import 'package:todos_api/todos_api.dart';
 import 'package:uuid/uuid.dart';
+
+import 'json_map.dart';
 
 part 'todo.g.dart';
 

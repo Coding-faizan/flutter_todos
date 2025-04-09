@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:todos_repository/todos_repository.dart';
+
+import '../../../data/models/todo.dart';
+import '../../../domain/repository/todos_repository.dart';
 
 part 'edit_todo_event.dart';
 part 'edit_todo_state.dart';
@@ -43,7 +45,7 @@ class EditTodoBloc extends Bloc<EditTodoEvent, EditTodoState> {
     Emitter<EditTodoState> emit,
   ) async {
     emit(state.copyWith(status: EditTodoStatus.loading));
-    final todo = (state.initialTodo ?? Todo(title: '')).copyWith(
+    final Todo todo = (state.initialTodo ?? Todo(title: '')).copyWith(
       title: state.title,
       description: state.description,
     );

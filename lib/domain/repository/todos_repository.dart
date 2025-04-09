@@ -1,4 +1,5 @@
-import 'package:todos_api/todos_api.dart';
+import '../../data/models/todo.dart';
+import '../../data/repository/todos_api.dart';
 
 /// {@template todos_repository}
 /// A repository that handles `todo` related requests.

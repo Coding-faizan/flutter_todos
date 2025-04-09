@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todos/l10n/l10n.dart';
-import 'package:flutter_todos/presentation/cubit/stats/stats.dart';
-import 'package:todos_repository/todos_repository.dart';
+
+import '../../../domain/repository/todos_repository.dart';
+import '../../../l10n/l10n.dart';
+import '../../bloc/stats/stats_bloc.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});

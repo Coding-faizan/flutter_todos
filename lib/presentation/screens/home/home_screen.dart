@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todos/presentation/bloc/edit_todo/edit_todo.dart';
-import 'package:flutter_todos/presentation/screens/edit_todo/edit_todo_screen.dart';
-import 'package:flutter_todos/presentation/cubit/home/home.dart';
-import 'package:flutter_todos/presentation/cubit/stats/stats.dart';
-import 'package:flutter_todos/presentation/bloc/todos_overview/todos_overview.dart';
+
+import '../../cubit/home/home_cubit.dart';
+import '../edit_todo/edit_todo_screen.dart';
+import '../stats/stats_screen.dart';
+import '../todos_overview/todos_overview_screen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -23,12 +23,13 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedTab = context.select((HomeCubit cubit) => cubit.state.tab);
+    final HomeTab selectedTab =
+        context.select((HomeCubit cubit) => cubit.state.tab);
 
     return Scaffold(
       body: IndexedStack(
         index: selectedTab.index,
-        children: const [TodosOverviewPage(), StatsPage()],
+        children: const <Widget>[TodosOverviewPage(), StatsPage()],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
@@ -41,7 +42,7 @@ class HomeView extends StatelessWidget {
         shape: const CircularNotchedRectangle(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
+          children: <Widget>[
             _HomeTabButton(
               groupValue: selectedTab,
               value: HomeTab.todos,

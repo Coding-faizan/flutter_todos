@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_todos/presentation/bloc/todos_overview/todos_overview.dart';
-import 'package:todos_repository/todos_repository.dart';
+
+import '../../../data/models/todo.dart';
+import '../../../domain/repository/todos_repository.dart';
+import '../../extensions/todos_view_filter.dart';
 
 part 'todos_overview_event.dart';
 part 'todos_overview_state.dart';
@@ -30,7 +32,7 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
 
     await emit.forEach<List<Todo>>(
       _todosRepository.getTodos(),
-      onData: (todos) => state.copyWith(
+      onData: (List<Todo> todos) => state.copyWith(
         status: () => TodosOverviewStatus.success,
         todos: () => todos,
       ),
@@ -44,7 +46,7 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
     TodosOverviewTodoCompletionToggled event,
     Emitter<TodosOverviewState> emit,
   ) async {
-    final newTodo = event.todo.copyWith(isCompleted: event.isCompleted);
+    final Todo newTodo = event.todo.copyWith(isCompleted: event.isCompleted);
     await _todosRepository.saveTodo(newTodo);
   }
 
@@ -65,7 +67,7 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
       'Last deleted todo can not be null.',
     );
 
-    final todo = state.lastDeletedTodo!;
+    final Todo todo = state.lastDeletedTodo!;
     emit(state.copyWith(lastDeletedTodo: () => null));
     await _todosRepository.saveTodo(todo);
   }
@@ -81,7 +83,8 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
     TodosOverviewToggleAllRequested event,
     Emitter<TodosOverviewState> emit,
   ) async {
-    final areAllCompleted = state.todos.every((todo) => todo.isCompleted);
+    final bool areAllCompleted =
+        state.todos.every((Todo todo) => todo.isCompleted);
     await _todosRepository.completeAll(isCompleted: !areAllCompleted);
   }
 

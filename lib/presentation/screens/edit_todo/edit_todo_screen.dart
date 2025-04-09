@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todos/presentation/bloc/edit_todo/edit_todo.dart';
-import 'package:flutter_todos/l10n/l10n.dart';
-import 'package:todos_repository/todos_repository.dart';
+
+import '../../../data/models/todo.dart';
+import '../../../domain/repository/todos_repository.dart';
+import '../../../l10n/l10n.dart';
+import '../../bloc/edit_todo/edit_todo_bloc.dart';
 
 class EditTodoPage extends StatelessWidget {
   const EditTodoPage({super.key});
@@ -12,8 +14,8 @@ class EditTodoPage extends StatelessWidget {
   static Route<void> route({Todo? initialTodo}) {
     return MaterialPageRoute(
       fullscreenDialog: true,
-      builder: (context) => BlocProvider(
-        create: (context) => EditTodoBloc(
+      builder: (BuildContext context) => BlocProvider(
+        create: (BuildContext context) => EditTodoBloc(
           todosRepository: context.read<TodosRepository>(),
           initialTodo: initialTodo,
         ),
@@ -25,10 +27,11 @@ class EditTodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<EditTodoBloc, EditTodoState>(
-      listenWhen: (previous, current) =>
+      listenWhen: (EditTodoState previous, EditTodoState current) =>
           previous.status != current.status &&
           current.status == EditTodoStatus.success,
-      listener: (context, state) => Navigator.of(context).pop(),
+      listener: (BuildContext context, EditTodoState state) =>
+          Navigator.of(context).pop(),
       child: const EditTodoView(),
     );
   }
@@ -39,9 +42,10 @@ class EditTodoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final status = context.select((EditTodoBloc bloc) => bloc.state.status);
-    final isNewTodo = context.select(
+    final AppLocalizations l10n = context.l10n;
+    final EditTodoStatus status =
+        context.select((EditTodoBloc bloc) => bloc.state.status);
+    final bool isNewTodo = context.select(
       (EditTodoBloc bloc) => bloc.state.isNewTodo,
     );
 
@@ -70,7 +74,7 @@ class EditTodoView extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Column(
-              children: [_TitleField(), _DescriptionField()],
+              children: <Widget>[_TitleField(), _DescriptionField()],
             ),
           ),
         ),
@@ -84,9 +88,9 @@ class _TitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final state = context.watch<EditTodoBloc>().state;
-    final hintText = state.initialTodo?.title ?? '';
+    final AppLocalizations l10n = context.l10n;
+    final EditTodoState state = context.watch<EditTodoBloc>().state;
+    final String hintText = state.initialTodo?.title ?? '';
 
     return TextFormField(
       key: const Key('editTodoView_title_textFormField'),
@@ -97,11 +101,11 @@ class _TitleField extends StatelessWidget {
         hintText: hintText,
       ),
       maxLength: 50,
-      inputFormatters: [
+      inputFormatters: <TextInputFormatter>[
         LengthLimitingTextInputFormatter(50),
         FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
       ],
-      onChanged: (value) {
+      onChanged: (String value) {
         context.read<EditTodoBloc>().add(EditTodoTitleChanged(value));
       },
     );
@@ -113,10 +117,10 @@ class _DescriptionField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
+    final AppLocalizations l10n = context.l10n;
 
-    final state = context.watch<EditTodoBloc>().state;
-    final hintText = state.initialTodo?.description ?? '';
+    final EditTodoState state = context.watch<EditTodoBloc>().state;
+    final String hintText = state.initialTodo?.description ?? '';
 
     return TextFormField(
       key: const Key('editTodoView_description_textFormField'),
@@ -128,10 +132,10 @@ class _DescriptionField extends StatelessWidget {
       ),
       maxLength: 300,
       maxLines: 7,
-      inputFormatters: [
+      inputFormatters: <TextInputFormatter>[
         LengthLimitingTextInputFormatter(300),
       ],
-      onChanged: (value) {
+      onChanged: (String value) {
         context.read<EditTodoBloc>().add(EditTodoDescriptionChanged(value));
       },
     );

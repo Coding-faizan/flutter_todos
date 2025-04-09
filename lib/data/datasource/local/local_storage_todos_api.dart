@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:rxdart/subjects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todos_api/todos_api.dart';
+
+import '../../models/todo.dart' show Todo;
+import '../../repository/todos_api.dart' show TodoNotFoundException, TodosApi;
 
 /// {@template local_storage_todos_api}
 /// A Flutter implementation of the [TodosApi] that uses local storage.
@@ -19,8 +21,9 @@ class LocalStorageTodosApi extends TodosApi {
 
   final SharedPreferences _plugin;
 
-  late final _todoStreamController = BehaviorSubject<List<Todo>>.seeded(
-    const [],
+  late final BehaviorSubject<List<Todo>> _todoStreamController =
+      BehaviorSubject<List<Todo>>.seeded(
+    const <Todo>[],
   );
 
   /// The key used for storing the todos locally.
@@ -28,23 +31,24 @@ class LocalStorageTodosApi extends TodosApi {
   /// This is only exposed for testing and shouldn't be used by consumers of
   /// this library.
   @visibleForTesting
-  static const kTodosCollectionKey = '__todos_collection_key__';
+  static const String kTodosCollectionKey = '__todos_collection_key__';
 
   String? _getValue(String key) => _plugin.getString(key);
   Future<void> _setValue(String key, String value) =>
       _plugin.setString(key, value);
 
   void _init() {
-    final todosJson = _getValue(kTodosCollectionKey);
+    final String? todosJson = _getValue(kTodosCollectionKey);
     if (todosJson != null) {
-      final todos = List<Map<dynamic, dynamic>>.from(
+      final List<Todo> todos = List<Map<dynamic, dynamic>>.from(
         json.decode(todosJson) as List,
       )
-          .map((jsonMap) => Todo.fromJson(Map<String, dynamic>.from(jsonMap)))
+          .map((Map jsonMap) =>
+              Todo.fromJson(Map<String, dynamic>.from(jsonMap)))
           .toList();
       _todoStreamController.add(todos);
     } else {
-      _todoStreamController.add(const []);
+      _todoStreamController.add(const <Todo>[]);
     }
   }
 
@@ -53,8 +57,8 @@ class LocalStorageTodosApi extends TodosApi {
 
   @override
   Future<void> saveTodo(Todo todo) {
-    final todos = [..._todoStreamController.value];
-    final todoIndex = todos.indexWhere((t) => t.id == todo.id);
+    final List<Todo> todos = <Todo>[..._todoStreamController.value];
+    final int todoIndex = todos.indexWhere((Todo t) => t.id == todo.id);
     if (todoIndex >= 0) {
       todos[todoIndex] = todo;
     } else {
@@ -67,8 +71,8 @@ class LocalStorageTodosApi extends TodosApi {
 
   @override
   Future<void> deleteTodo(String id) async {
-    final todos = [..._todoStreamController.value];
-    final todoIndex = todos.indexWhere((t) => t.id == id);
+    final List<Todo> todos = <Todo>[..._todoStreamController.value];
+    final int todoIndex = todos.indexWhere((Todo t) => t.id == id);
     if (todoIndex == -1) {
       throw TodoNotFoundException();
     } else {
@@ -80,11 +84,11 @@ class LocalStorageTodosApi extends TodosApi {
 
   @override
   Future<int> clearCompleted() async {
-    final todos = [..._todoStreamController.value];
-    final initialLength = todos.length;
+    final List<Todo> todos = <Todo>[..._todoStreamController.value];
+    final int initialLength = todos.length;
 
-    todos.removeWhere((t) => t.isCompleted);
-    final completedTodosAmount = initialLength - todos.length;
+    todos.removeWhere((Todo t) => t.isCompleted);
+    final int completedTodosAmount = initialLength - todos.length;
 
     _todoStreamController.add(todos);
     await _setValue(kTodosCollectionKey, json.encode(todos));
@@ -93,11 +97,11 @@ class LocalStorageTodosApi extends TodosApi {
 
   @override
   Future<int> completeAll({required bool isCompleted}) async {
-    final todos = [..._todoStreamController.value];
-    final changedTodosAmount =
-        todos.where((t) => t.isCompleted != isCompleted).length;
-    final newTodos = [
-      for (final todo in todos) todo.copyWith(isCompleted: isCompleted),
+    final List<Todo> todos = <Todo>[..._todoStreamController.value];
+    final int changedTodosAmount =
+        todos.where((Todo t) => t.isCompleted != isCompleted).length;
+    final List<Todo> newTodos = <Todo>[
+      for (final Todo todo in todos) todo.copyWith(isCompleted: isCompleted),
     ];
     _todoStreamController.add(newTodos);
     await _setValue(kTodosCollectionKey, json.encode(newTodos));

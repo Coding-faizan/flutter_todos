@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_todos/presentation/cubit/home/home.dart';
-import 'package:flutter_todos/l10n/l10n.dart';
-import 'package:flutter_todos/theme/theme.dart';
-import 'package:todos_repository/todos_repository.dart';
+
+import '../domain/repository/todos_repository.dart';
+import '../l10n/l10n.dart';
+import '../presentation/screens/home/home_screen.dart';
+import '../theme/theme.dart';
 
 class App extends StatelessWidget {
   const App({required this.createTodosRepository, super.key});
