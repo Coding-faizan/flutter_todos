@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../data/models/todo.dart';
 import '../../../domain/repository/todos_repository.dart';
@@ -129,9 +130,7 @@ class TodosOverviewView extends StatelessWidget {
                           .add(TodosOverviewTodoDeleted(todo));
                     },
                     onTap: () {
-                      Navigator.of(context).push(
-                        EditTodoPage.route(initialTodo: todo),
-                      );
+                      context.push('/todo/${todo.id}', extra: todo);
                     },
                   );
                 },

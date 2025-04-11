@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../data/models/todo.dart';
+import '../domain/repository/todos_repository.dart';
+import '../presentation/bloc/edit_todo/edit_todo_bloc.dart';
+import '../presentation/screens/edit_todo/edit_todo_screen.dart';
+import '../presentation/screens/home/main_screen.dart';
+import '../presentation/screens/stats/stats_screen.dart';
+import '../presentation/screens/todos_overview/todos_overview_screen.dart';
+
+/// ```txt
+/// (App Routes)
+/// ├── / <- SplashScreen
+/// ├── (shell route)
+/// │   ├── /home <- HomeScreen
+/// │   └── /stats <- StatsScreen
+/// └── (push route)
+///    ├── /todo/new <- NewTodoScreen
+///    └── /todo/:id <- TodoDetailScreen
+///    └── /todo/:id/edit <- EditTodoScreen
+/// ```
+class AppRoutes {
+  static final GlobalKey<NavigatorState> _rootNavigatorKey =
+      GlobalKey<NavigatorState>();
+
+  static final GoRouter appRoutes = GoRouter(
+    navigatorKey: _rootNavigatorKey,
+    initialLocation: '/home',
+    routes: <RouteBase>[
+      /// SplashScreen add later
+      // GoRoute(
+      //   path: '/',
+      //   builder: (BuildContext context, GoRouterState state) => const SplashScreen(),
+      // ),
+
+      StatefulShellRoute.indexedStack(
+        builder: (BuildContext context, GoRouterState state,
+            StatefulNavigationShell navigationShell) {
+          return MainScreen(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/home',
+                builder: (BuildContext context, GoRouterState state) =>
+                    const TodosOverviewPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                  path: '/stats',
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const StatsPage()),
+            ],
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/todo/new',
+        builder: (BuildContext context, GoRouterState state) {
+          return BlocProvider<EditTodoBloc>(
+            create: (BuildContext context) => EditTodoBloc(
+              todosRepository: context.read<TodosRepository>(),
+              initialTodo: null,
+            ),
+            child: const EditTodoPage(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/todo/:id',
+        builder: (BuildContext context, GoRouterState state) {
+          final Todo? todo = state.extra as Todo?;
+          if (todo == null) {
+            return const SizedBox.shrink();
+          }
+          return BlocProvider<EditTodoBloc>(
+            create: (BuildContext context) => EditTodoBloc(
+              todosRepository: context.read<TodosRepository>(),
+              initialTodo: todo,
+            ),
+            child: const EditTodoPage(),
+          );
+        },
+      ),
+      //  GoRoute(
+      //   path: '/todo/:id/edit',
+      //   builder: (BuildContext context, GoRouterState state) => const EditTodoScreen(),
+      // ),
+    ],
+  );
+}
