@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/routes/route_argument.dart';
 import '../edit_todo/edit_todo_screen.dart';
 
 class MainScreen extends StatelessWidget {
@@ -19,7 +20,7 @@ class MainScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         key: const Key('homeView_addTodo_floatingActionButton'),
-        onPressed: () => context.push('/todo/new'),
+        onPressed: () => context.push(const NewTodoScreenRoute().toString()),
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(

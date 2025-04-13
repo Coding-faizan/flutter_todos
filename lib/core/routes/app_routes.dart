@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../data/models/todo.dart';
-import '../domain/repository/todos_repository.dart';
-import '../presentation/bloc/edit_todo/edit_todo_bloc.dart';
-import '../presentation/screens/edit_todo/edit_todo_screen.dart';
-import '../presentation/screens/home/main_screen.dart';
-import '../presentation/screens/stats/stats_screen.dart';
-import '../presentation/screens/todos_overview/todos_overview_screen.dart';
+import '../../data/models/todo.dart';
+import '../../domain/repository/todos_repository.dart';
+import '../../presentation/bloc/edit_todo/edit_todo_bloc.dart';
+import '../../presentation/screens/edit_todo/edit_todo_screen.dart';
+import '../../presentation/screens/home/main_screen.dart';
+import '../../presentation/screens/stats/stats_screen.dart';
+import '../../presentation/screens/todos_overview/todos_overview_screen.dart';
+import 'route_argument.dart';
 
 /// ```txt
 /// (App Routes)
@@ -27,7 +28,7 @@ class AppRoutes {
 
   static final GoRouter appRoutes = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/home',
+    initialLocation: HomeScreenRoute.path,
     routes: <RouteBase>[
       /// SplashScreen add later
       // GoRoute(
@@ -44,7 +45,7 @@ class AppRoutes {
           StatefulShellBranch(
             routes: <RouteBase>[
               GoRoute(
-                path: '/home',
+                path: HomeScreenRoute.path,
                 builder: (BuildContext context, GoRouterState state) =>
                     const TodosOverviewPage(),
               ),
@@ -53,7 +54,7 @@ class AppRoutes {
           StatefulShellBranch(
             routes: <RouteBase>[
               GoRoute(
-                  path: '/stats',
+                  path: StatsScreenRoute.path,
                   builder: (BuildContext context, GoRouterState state) =>
                       const StatsPage()),
             ],
@@ -61,7 +62,7 @@ class AppRoutes {
         ],
       ),
       GoRoute(
-        path: '/todo/new',
+        path: NewTodoScreenRoute.path,
         builder: (BuildContext context, GoRouterState state) {
           return BlocProvider<EditTodoBloc>(
             create: (BuildContext context) => EditTodoBloc(
@@ -73,7 +74,7 @@ class AppRoutes {
         },
       ),
       GoRoute(
-        path: '/todo/:id',
+        path: TodoDetailScreenRoute.path,
         builder: (BuildContext context, GoRouterState state) {
           final Todo? todo = state.extra as Todo?;
           if (todo == null) {
