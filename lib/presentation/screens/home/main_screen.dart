@@ -20,7 +20,8 @@ class MainScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         key: const Key('homeView_addTodo_floatingActionButton'),
-        onPressed: () => context.push(const NewTodoScreenRoute().toString()),
+        onPressed: () =>
+            context.push(const NewTodoScreenRoute().uri.toString()),
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(

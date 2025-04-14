@@ -131,7 +131,8 @@ class TodosOverviewView extends StatelessWidget {
                           .add(TodosOverviewTodoDeleted(todo));
                     },
                     onTap: () {
-                      context.push(const TodoDetailScreenRoute().toString(),
+                      context.push(
+                          TodoDetailScreenRoute(id: todo.id).uri.toString(),
                           extra: todo);
                     },
                   );
