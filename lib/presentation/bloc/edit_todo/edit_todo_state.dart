@@ -1,43 +1,87 @@
-part of 'edit_todo_bloc.dart';
+part of 'edit_todo_cubit.dart';
 
-enum EditTodoStatus { initial, loading, success, failure }
-
-extension EditTodoStatusX on EditTodoStatus {
-  bool get isLoadingOrSuccess => [
-        EditTodoStatus.loading,
-        EditTodoStatus.success,
-      ].contains(this);
-}
-
-final class EditTodoState extends Equatable {
+sealed class EditTodoState {
   const EditTodoState({
-    this.status = EditTodoStatus.initial,
     this.initialTodo,
     this.title = '',
     this.description = '',
   });
 
-  final EditTodoStatus status;
+  EditTodoState copyWith({
+    Todo? initialTodo,
+    String? title,
+    String? description,
+  });
+
   final Todo? initialTodo;
   final String title;
   final String description;
 
   bool get isNewTodo => initialTodo == null;
+}
 
-  EditTodoState copyWith({
-    EditTodoStatus? status,
-    Todo? initialTodo,
-    String? title,
-    String? description,
-  }) {
-    return EditTodoState(
-      status: status ?? this.status,
+final class EditTodoInitial extends EditTodoState {
+  const EditTodoInitial({
+    super.initialTodo,
+    super.title,
+    super.description,
+  });
+
+  @override
+  EditTodoState copyWith(
+      {Todo? initialTodo, String? title, String? description}) {
+    return EditTodoInitial(
       initialTodo: initialTodo ?? this.initialTodo,
       title: title ?? this.title,
       description: description ?? this.description,
     );
   }
+}
+
+final class EditTodoLoading extends EditTodoState {
+  const EditTodoLoading({
+    super.initialTodo,
+    super.title,
+    super.description,
+  });
 
   @override
-  List<Object?> get props => [status, initialTodo, title, description];
+  EditTodoState copyWith(
+      {Todo? initialTodo, String? title, String? description}) {
+    return EditTodoLoading(
+      initialTodo: initialTodo ?? this.initialTodo,
+    );
+  }
+}
+
+final class EditTodoSuccess extends EditTodoState {
+  const EditTodoSuccess({
+    super.initialTodo,
+    super.title,
+    super.description,
+  });
+
+  @override
+  EditTodoState copyWith(
+      {Todo? initialTodo, String? title, String? description}) {
+    return EditTodoSuccess(
+      initialTodo: initialTodo ?? this.initialTodo,
+    );
+  }
+}
+
+final class EditTodoFailure extends EditTodoState {
+  const EditTodoFailure({
+    super.initialTodo,
+    super.title,
+    super.description,
+  });
+
+  @override
+  EditTodoState copyWith(
+      {Todo? initialTodo, String? title, String? description}) {
+    return EditTodoFailure(
+      initialTodo: initialTodo ?? this.initialTodo,
+    );
+  }
 }

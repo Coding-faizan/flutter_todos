@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/todo.dart';
 import '../../../domain/repository/todos_repository.dart';
 import '../../../l10n/l10n.dart';
-import '../../bloc/edit_todo/edit_todo_bloc.dart';
+import '../../bloc/edit_todo/edit_todo_cubit.dart';
 
 class EditTodoPage extends StatelessWidget {
   const EditTodoPage({super.key});
@@ -15,7 +15,7 @@ class EditTodoPage extends StatelessWidget {
     return MaterialPageRoute(
       fullscreenDialog: true,
       builder: (BuildContext context) => BlocProvider(
-        create: (BuildContext context) => EditTodoBloc(
+        create: (BuildContext context) => EditTodoCubit(
           todosRepository: context.read<TodosRepository>(),
           initialTodo: initialTodo,
         ),
@@ -26,10 +26,9 @@ class EditTodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<EditTodoBloc, EditTodoState>(
-      listenWhen: (EditTodoState previous, EditTodoState current) =>
-          previous.status != current.status &&
-          current.status == EditTodoStatus.success,
+    return BlocListener<EditTodoCubit, EditTodoState>(
+      listenWhen: (previous, current) =>
+          previous is! EditTodoSuccess && current is EditTodoSuccess,
       listener: (BuildContext context, EditTodoState state) =>
           Navigator.of(context).pop(),
       child: const EditTodoView(),
@@ -43,10 +42,11 @@ class EditTodoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = context.l10n;
-    final EditTodoStatus status =
-        context.select((EditTodoBloc bloc) => bloc.state.status);
+    final bool isLoading = context.select(
+      (EditTodoCubit cubit) => cubit.state is EditTodoLoading,
+    );
     final bool isNewTodo = context.select(
-      (EditTodoBloc bloc) => bloc.state.isNewTodo,
+      (EditTodoCubit cubit) => cubit.state.isNewTodo,
     );
 
     return Scaffold(
@@ -62,10 +62,9 @@ class EditTodoView extends StatelessWidget {
         shape: const ContinuousRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(32)),
         ),
-        onPressed: status.isLoadingOrSuccess
-            ? null
-            : () => context.read<EditTodoBloc>().add(const EditTodoSubmitted()),
-        child: status.isLoadingOrSuccess
+        onPressed:
+            isLoading ? null : () => context.read<EditTodoCubit>().submitted(),
+        child: isLoading
             ? const CupertinoActivityIndicator()
             : const Icon(Icons.check_rounded),
       ),
@@ -89,14 +88,15 @@ class _TitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = context.l10n;
-    final EditTodoState state = context.watch<EditTodoBloc>().state;
+    final EditTodoState state = context.watch<EditTodoCubit>().state;
     final String hintText = state.initialTodo?.title ?? '';
+    final bool isLoading = state is EditTodoLoading;
 
     return TextFormField(
       key: const Key('editTodoView_title_textFormField'),
       initialValue: state.title,
       decoration: InputDecoration(
-        enabled: !state.status.isLoadingOrSuccess,
+        enabled: !isLoading,
         labelText: l10n.editTodoTitleLabel,
         hintText: hintText,
       ),
@@ -106,7 +106,7 @@ class _TitleField extends StatelessWidget {
         FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
       ],
       onChanged: (String value) {
-        context.read<EditTodoBloc>().add(EditTodoTitleChanged(value));
+        context.read<EditTodoCubit>().titleChanged(value);
       },
     );
   }
@@ -118,15 +118,15 @@ class _DescriptionField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = context.l10n;
-
-    final EditTodoState state = context.watch<EditTodoBloc>().state;
+    final EditTodoState state = context.watch<EditTodoCubit>().state;
     final String hintText = state.initialTodo?.description ?? '';
+    final bool isLoading = state is EditTodoLoading;
 
     return TextFormField(
       key: const Key('editTodoView_description_textFormField'),
       initialValue: state.description,
       decoration: InputDecoration(
-        enabled: !state.status.isLoadingOrSuccess,
+        enabled: !isLoading,
         labelText: l10n.editTodoDescriptionLabel,
         hintText: hintText,
       ),
@@ -136,7 +136,7 @@ class _DescriptionField extends StatelessWidget {
         LengthLimitingTextInputFormatter(300),
       ],
       onChanged: (String value) {
-        context.read<EditTodoBloc>().add(EditTodoDescriptionChanged(value));
+        context.read<EditTodoCubit>().descriptionChanged(value);
       },
     );
   }

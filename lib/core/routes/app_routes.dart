@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/models/todo.dart';
 import '../../domain/repository/todos_repository.dart';
-import '../../presentation/bloc/edit_todo/edit_todo_bloc.dart';
+import '../../presentation/bloc/edit_todo/edit_todo_cubit.dart';
 import '../../presentation/screens/edit_todo/edit_todo_screen.dart';
 import '../../presentation/screens/home/main_screen.dart';
 import '../../presentation/screens/stats/stats_screen.dart';
@@ -64,8 +64,8 @@ class AppRoutes {
       GoRoute(
         path: NewTodoScreenRoute.path,
         builder: (BuildContext context, GoRouterState state) {
-          return BlocProvider<EditTodoBloc>(
-            create: (BuildContext context) => EditTodoBloc(
+          return BlocProvider<EditTodoCubit>(
+            create: (BuildContext context) => EditTodoCubit(
               todosRepository: context.read<TodosRepository>(),
               initialTodo: null,
             ),
@@ -80,8 +80,8 @@ class AppRoutes {
           if (todo == null) {
             return const SizedBox.shrink();
           }
-          return BlocProvider<EditTodoBloc>(
-            create: (BuildContext context) => EditTodoBloc(
+          return BlocProvider<EditTodoCubit>(
+            create: (BuildContext context) => EditTodoCubit(
               todosRepository: context.read<TodosRepository>(),
               initialTodo: todo,
             ),
