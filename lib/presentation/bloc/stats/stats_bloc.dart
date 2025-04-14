@@ -1,36 +1,40 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/gestures.dart';
 
 import '../../../data/models/todo.dart';
 import '../../../domain/repository/todos_repository.dart';
-
-part 'stats_event.dart';
 part 'stats_state.dart';
 
-class StatsBloc extends Bloc<StatsEvent, StatsState> {
-  StatsBloc({
+class StatsCubit extends Cubit<StatsState> {
+  StatsCubit({
     required TodosRepository todosRepository,
   })  : _todosRepository = todosRepository,
-        super(const StatsState()) {
-    on<StatsSubscriptionRequested>(_onSubscriptionRequested);
+        super(const StatsInitial()) {
+    _onSubscriptionRequested();
   }
 
   final TodosRepository _todosRepository;
+  late final StreamSubscription<List<Todo>> _todosSubscription;
 
-  Future<void> _onSubscriptionRequested(
-    StatsSubscriptionRequested event,
-    Emitter<StatsState> emit,
-  ) async {
-    emit(state.copyWith(status: StatsStatus.loading));
+  Future<void> _onSubscriptionRequested() async {
+    emit(const StatsLoading());
 
-    await emit.forEach<List<Todo>>(
-      _todosRepository.getTodos(),
-      onData: (List<Todo> todos) => state.copyWith(
-        status: StatsStatus.success,
+    _todosSubscription = _todosRepository.getTodos().listen((List<Todo> todos) {
+      emit(StatsSuccess(
         completedTodos: todos.where((Todo todo) => todo.isCompleted).length,
         activeTodos: todos.where((Todo todo) => !todo.isCompleted).length,
-      ),
-      onError: (_, __) => state.copyWith(status: StatsStatus.failure),
-    );
+      ));
+    }, onError: (_) {
+      emit(const StatsFailure());
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _todosSubscription.cancel();
+    return super.close();
   }
 }

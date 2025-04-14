@@ -1,28 +1,74 @@
 part of 'stats_bloc.dart';
 
-enum StatsStatus { initial, loading, success, failure }
-
-final class StatsState extends Equatable {
+sealed class StatsState {
   const StatsState({
-    this.status = StatsStatus.initial,
     this.completedTodos = 0,
     this.activeTodos = 0,
   });
 
-  final StatsStatus status;
   final int completedTodos;
   final int activeTodos;
 
-  @override
-  List<Object> get props => [status, completedTodos, activeTodos];
-
   StatsState copyWith({
-    StatsStatus? status,
     int? completedTodos,
     int? activeTodos,
-  }) {
-    return StatsState(
-      status: status ?? this.status,
+  });
+}
+
+final class StatsInitial extends StatsState {
+  const StatsInitial({
+    super.completedTodos,
+    super.activeTodos,
+  });
+
+  @override
+  StatsState copyWith({int? completedTodos, int? activeTodos}) {
+    return StatsInitial(
+      completedTodos: completedTodos ?? this.completedTodos,
+      activeTodos: activeTodos ?? this.activeTodos,
+    );
+  }
+}
+
+final class StatsLoading extends StatsState {
+  const StatsLoading({
+    super.completedTodos,
+    super.activeTodos,
+  });
+
+  @override
+  StatsState copyWith({int? completedTodos, int? activeTodos}) {
+    return StatsLoading(
+      completedTodos: completedTodos ?? this.completedTodos,
+      activeTodos: activeTodos ?? this.activeTodos,
+    );
+  }
+}
+
+final class StatsSuccess extends StatsState {
+  const StatsSuccess({
+    super.completedTodos,
+    super.activeTodos,
+  });
+
+  @override
+  StatsState copyWith({int? completedTodos, int? activeTodos}) {
+    return StatsSuccess(
+      completedTodos: completedTodos ?? this.completedTodos,
+      activeTodos: activeTodos ?? this.activeTodos,
+    );
+  }
+}
+
+final class StatsFailure extends StatsState {
+  const StatsFailure({
+    super.completedTodos,
+    super.activeTodos,
+  });
+
+  @override
+  StatsState copyWith({int? completedTodos, int? activeTodos}) {
+    return StatsFailure(
       completedTodos: completedTodos ?? this.completedTodos,
       activeTodos: activeTodos ?? this.activeTodos,
     );

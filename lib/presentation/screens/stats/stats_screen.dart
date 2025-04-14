@@ -11,7 +11,7 @@ class StatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => StatsBloc(
+      create: (context) => StatsCubit(
         todosRepository: context.read<TodosRepository>(),
       )..add(const StatsSubscriptionRequested()),
       child: const StatsView(),
@@ -25,7 +25,7 @@ class StatsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final state = context.watch<StatsBloc>().state;
+    final state = context.watch<StatsCubit>().state;
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
