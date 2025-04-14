@@ -1,3 +1,5 @@
+import '../../data/models/todo.dart';
+
 abstract class Screen<T extends RouteArg> {
   T get arg;
 }
@@ -39,10 +41,10 @@ class NewTodoScreenRoute extends RouteArg {
 class TodoDetailScreenRoute extends RouteArg {
   static const String path = '/todo/';
 
-  final String id;
+  final Todo todo;
 
-  const TodoDetailScreenRoute({required this.id}) : super();
+  const TodoDetailScreenRoute({required this.todo}) : super();
 
   @override
-  Uri get uri => Uri(path: '$path$id');
+  Uri get uri => Uri(path: '$path${todo.id}');
 }

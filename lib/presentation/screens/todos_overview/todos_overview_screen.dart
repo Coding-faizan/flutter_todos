@@ -132,8 +132,7 @@ class TodosOverviewView extends StatelessWidget {
                     },
                     onTap: () {
                       context.push(
-                          TodoDetailScreenRoute(id: todo.id).uri.toString(),
-                          extra: todo);
+                          TodoDetailScreenRoute(todo: todo).uri.toString());
                     },
                   );
                 },
