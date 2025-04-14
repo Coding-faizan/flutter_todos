@@ -39,12 +39,12 @@ class NewTodoScreenRoute extends RouteArg {
 }
 
 class TodoDetailScreenRoute extends RouteArg {
-  static const String path = '/todo/';
+  static const String path = '/todo';
 
   final Todo todo;
 
   const TodoDetailScreenRoute({required this.todo}) : super();
 
   @override
-  Uri get uri => Uri(path: '$path${todo.id}');
+  Uri get uri => Uri(path: '$path/${todo.id}');
 }

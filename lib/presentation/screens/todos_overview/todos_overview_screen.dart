@@ -19,10 +19,10 @@ class TodosOverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => TodosOverviewBloc(
+    return BlocProvider<TodosOverviewCubit>(
+      create: (BuildContext context) => TodosOverviewCubit(
         todosRepository: context.read<TodosRepository>(),
-      )..add(const TodosOverviewSubscriptionRequested()),
+      ),
       child: const TodosOverviewView(),
     );
   }
@@ -45,12 +45,12 @@ class TodosOverviewView extends StatelessWidget {
       ),
       body: MultiBlocListener(
         listeners: <SingleChildWidget>[
-          BlocListener<TodosOverviewBloc, TodosOverviewState>(
+          BlocListener<TodosOverviewCubit, TodosOverviewState>(
             listenWhen:
                 (TodosOverviewState previous, TodosOverviewState current) =>
-                    previous.status != current.status,
+                    previous != current,
             listener: (BuildContext context, TodosOverviewState state) {
-              if (state.status == TodosOverviewStatus.failure) {
+              if (state == const TodosOverviewFailure()) {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(
@@ -61,7 +61,7 @@ class TodosOverviewView extends StatelessWidget {
               }
             },
           ),
-          BlocListener<TodosOverviewBloc, TodosOverviewState>(
+          BlocListener<TodosOverviewCubit, TodosOverviewState>(
             listenWhen:
                 (TodosOverviewState previous, TodosOverviewState current) =>
                     previous.lastDeletedTodo != current.lastDeletedTodo &&
@@ -84,8 +84,8 @@ class TodosOverviewView extends StatelessWidget {
                       onPressed: () {
                         messenger.hideCurrentSnackBar();
                         context
-                            .read<TodosOverviewBloc>()
-                            .add(const TodosOverviewUndoDeletionRequested());
+                            .read<TodosOverviewCubit>()
+                            .onUndoDeletionRequested();
                       },
                     ),
                   ),
@@ -93,12 +93,12 @@ class TodosOverviewView extends StatelessWidget {
             },
           ),
         ],
-        child: BlocBuilder<TodosOverviewBloc, TodosOverviewState>(
+        child: BlocBuilder<TodosOverviewCubit, TodosOverviewState>(
           builder: (BuildContext context, TodosOverviewState state) {
             if (state.todos.isEmpty) {
-              if (state.status == TodosOverviewStatus.loading) {
+              if (state == const TodosOverviewLoading()) {
                 return const Center(child: CupertinoActivityIndicator());
-              } else if (state.status != TodosOverviewStatus.success) {
+              } else if (state != const TodosOverviewSuccess()) {
                 return const SizedBox();
               } else {
                 return Center(
@@ -118,17 +118,12 @@ class TodosOverviewView extends StatelessWidget {
                   return TodoListTile(
                     todo: todo,
                     onToggleCompleted: (bool isCompleted) {
-                      context.read<TodosOverviewBloc>().add(
-                            TodosOverviewTodoCompletionToggled(
-                              todo: todo,
-                              isCompleted: isCompleted,
-                            ),
-                          );
+                      context
+                          .read<TodosOverviewCubit>()
+                          .onTodoCompletionToggled(todo);
                     },
                     onDismissed: (_) {
-                      context
-                          .read<TodosOverviewBloc>()
-                          .add(TodosOverviewTodoDeleted(todo));
+                      context.read<TodosOverviewCubit>().onTodoDeleted(todo);
                     },
                     onTap: () {
                       context.push(
