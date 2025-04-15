@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nested/nested.dart';
 
+import '../../../core/config.dart';
 import '../../../core/injector.dart';
 import '../../../core/routes/extension.dart';
 import '../../../core/routes/route_argument.dart';
@@ -36,10 +37,11 @@ class TodosOverviewView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = context.l10n;
-
+    final AppConfig config = AppConfig();
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.todosOverviewAppBarTitle),
+        title: Text(
+            '${l10n.todosOverviewAppBarTitle}Environemt: ${config.environment.name}'),
         actions: const <Widget>[
           TodosOverviewFilterButton(),
           TodosOverviewOptionsButton(),
