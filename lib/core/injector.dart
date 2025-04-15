@@ -37,18 +37,26 @@ final class _Injector extends Injector {
     final KiwiContainer container = KiwiContainer();
     final SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    container.registerSingleton<TodosApi>(
-      (KiwiContainer c) => LocalStorageTodosApi(plugin: preferences),
+    container.registerSingleton<SharedPreferences>(
+      (KiwiContainer c) => preferences,
     );
+  }
+
+  @override
+  Future<void> _initialiseDatasource() async {
+    final KiwiContainer container = KiwiContainer();
+
+    container.registerSingleton<TodosApi>(
+      (KiwiContainer c) => LocalStorageTodosApi(plugin: c<SharedPreferences>()),
+    );
+  }
+
+  @override
+  Future<void> _initialiseRepositories() async {
+    final KiwiContainer container = KiwiContainer();
 
     container.registerSingleton<TodosRepository>(
       (KiwiContainer c) => TodosRepository(todosApi: c<TodosApi>()),
     );
   }
-
-  @override
-  Future<void> _initialiseDatasource() async {}
-
-  @override
-  Future<void> _initialiseRepositories() async {}
 }

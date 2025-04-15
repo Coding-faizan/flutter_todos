@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nested/nested.dart';
 
+import '../../../core/injector.dart';
 import '../../../core/routes/extension.dart';
 import '../../../core/routes/route_argument.dart';
 import '../../../data/models/todo.dart';
@@ -22,7 +23,7 @@ class TodosOverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<TodosOverviewCubit>(
       create: (BuildContext context) => TodosOverviewCubit(
-        todosRepository: context.read<TodosRepository>(),
+        todosRepository: Injector.resolve<TodosRepository>(),
       ),
       child: const TodosOverviewView(),
     );

@@ -1,0 +1,27 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'core/app.dart';
+import 'core/app_bloc_observer.dart';
+import 'core/injector.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    log(details.exceptionAsString(), stackTrace: details.stack);
+  };
+
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    log(error.toString(), stackTrace: stack);
+    return true;
+  };
+
+  Bloc.observer = const AppBlocObserver();
+
+  await Injector.initialise();
+
+  runApp(const App());
+}

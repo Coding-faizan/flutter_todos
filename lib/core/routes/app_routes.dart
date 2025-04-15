@@ -9,6 +9,7 @@ import '../../presentation/screens/edit_todo/edit_todo_screen.dart';
 import '../../presentation/screens/home/main_screen.dart';
 import '../../presentation/screens/stats/stats_screen.dart';
 import '../../presentation/screens/todos_overview/todos_overview_screen.dart';
+import '../injector.dart';
 import 'route_argument.dart';
 
 /// ```txt
@@ -66,7 +67,7 @@ class AppRoutes {
         builder: (BuildContext context, GoRouterState state) {
           return BlocProvider<EditTodoCubit>(
             create: (BuildContext context) => EditTodoCubit(
-              todosRepository: context.read<TodosRepository>(),
+              todosRepository: Injector.resolve<TodosRepository>(),
               initialTodo: null,
             ),
             child: const EditTodoPage(),
@@ -80,7 +81,7 @@ class AppRoutes {
               TodoDetailScreenRoute.fromState(state);
           return BlocProvider<EditTodoCubit>(
             create: (BuildContext context) => EditTodoCubit(
-              todosRepository: context.read<TodosRepository>(),
+              todosRepository: Injector.resolve<TodosRepository>(),
               initialTodo: route.todo,
             ),
             child: const EditTodoPage(),
