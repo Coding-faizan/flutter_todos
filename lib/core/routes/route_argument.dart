@@ -1,3 +1,5 @@
+import 'package:go_router/go_router.dart';
+
 import '../../data/models/todo.dart';
 
 abstract class Screen<T extends RouteArg> {
@@ -44,6 +46,13 @@ class TodoDetailScreenRoute extends RouteArg {
   final Todo todo;
 
   const TodoDetailScreenRoute({required this.todo}) : super();
+  factory TodoDetailScreenRoute.fromState(GoRouterState state) {
+    final TodoDetailScreenRoute? route = state.extra as TodoDetailScreenRoute?;
+    if (route == null) {
+      throw Exception('Todo is null');
+    }
+    return route;
+  }
 
   @override
   Uri get uri => Uri(path: path);

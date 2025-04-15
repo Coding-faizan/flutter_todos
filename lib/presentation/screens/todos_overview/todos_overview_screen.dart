@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nested/nested.dart';
 
+import '../../../core/routes/extension.dart';
 import '../../../core/routes/route_argument.dart';
 import '../../../data/models/todo.dart';
 import '../../../domain/repository/todos_repository.dart';
@@ -126,8 +127,8 @@ class TodosOverviewView extends StatelessWidget {
                       context.read<TodosOverviewCubit>().onTodoDeleted(todo);
                     },
                     onTap: () {
-                      context.push(
-                        TodoDetailScreenRoute(todo: todo).uri.toString(),
+                      context.pushScreen(
+                        arg: TodoDetailScreenRoute(todo: todo),
                       );
                     },
                   );

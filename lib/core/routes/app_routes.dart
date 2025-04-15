@@ -74,32 +74,14 @@ class AppRoutes {
         },
       ),
       GoRoute(
-        path: NewTodoScreenRoute.path,
-        builder: (BuildContext context, GoRouterState state) {
-          final Todo? todo = state.extra as Todo?;
-          if (todo == null) {
-            return const SizedBox.shrink();
-          }
-          return BlocProvider<EditTodoCubit>(
-            create: (BuildContext context) => EditTodoCubit(
-              todosRepository: context.read<TodosRepository>(),
-              initialTodo: todo,
-            ),
-            child: const EditTodoPage(),
-          );
-        },
-      ),
-      GoRoute(
         path: TodoDetailScreenRoute.path,
         builder: (BuildContext context, GoRouterState state) {
-          final Todo? todo = state.extra as Todo?;
-          if (todo == null) {
-            return const SizedBox.shrink();
-          }
+          final TodoDetailScreenRoute route =
+              TodoDetailScreenRoute.fromState(state);
           return BlocProvider<EditTodoCubit>(
             create: (BuildContext context) => EditTodoCubit(
               todosRepository: context.read<TodosRepository>(),
-              initialTodo: todo,
+              initialTodo: route.todo,
             ),
             child: const EditTodoPage(),
           );
