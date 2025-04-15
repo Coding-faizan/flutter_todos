@@ -6,23 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/todo.dart';
 import '../../../domain/repository/todos_repository.dart';
 import '../../../l10n/l10n.dart';
-import '../../bloc/edit_todo/edit_todo_cubit.dart';
+import '../../cubit/edit_todo/edit_todo_cubit.dart';
 
 class EditTodoPage extends StatelessWidget {
   const EditTodoPage({super.key});
-
-  static Route<void> route({Todo? initialTodo}) {
-    return MaterialPageRoute(
-      fullscreenDialog: true,
-      builder: (BuildContext context) => BlocProvider(
-        create: (BuildContext context) => EditTodoCubit(
-          todosRepository: context.read<TodosRepository>(),
-          initialTodo: initialTodo,
-        ),
-        child: const EditTodoPage(),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

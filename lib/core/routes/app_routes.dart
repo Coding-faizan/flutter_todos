@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/models/todo.dart';
 import '../../domain/repository/todos_repository.dart';
-import '../../presentation/bloc/edit_todo/edit_todo_cubit.dart';
+import '../../presentation/cubit/edit_todo/edit_todo_cubit.dart';
 import '../../presentation/screens/edit_todo/edit_todo_screen.dart';
 import '../../presentation/screens/home/main_screen.dart';
 import '../../presentation/screens/stats/stats_screen.dart';
@@ -74,6 +74,22 @@ class AppRoutes {
         },
       ),
       GoRoute(
+        path: NewTodoScreenRoute.path,
+        builder: (BuildContext context, GoRouterState state) {
+          final Todo? todo = state.extra as Todo?;
+          if (todo == null) {
+            return const SizedBox.shrink();
+          }
+          return BlocProvider<EditTodoCubit>(
+            create: (BuildContext context) => EditTodoCubit(
+              todosRepository: context.read<TodosRepository>(),
+              initialTodo: todo,
+            ),
+            child: const EditTodoPage(),
+          );
+        },
+      ),
+      GoRoute(
         path: TodoDetailScreenRoute.path,
         builder: (BuildContext context, GoRouterState state) {
           final Todo? todo = state.extra as Todo?;
@@ -89,10 +105,6 @@ class AppRoutes {
           );
         },
       ),
-      //  GoRoute(
-      //   path: '/todo/:id/edit',
-      //   builder: (BuildContext context, GoRouterState state) => const EditTodoScreen(),
-      // ),
     ],
   );
 }

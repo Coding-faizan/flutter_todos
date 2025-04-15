@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 
 import '../../../data/models/todo.dart';
@@ -10,29 +12,34 @@ class TodosOverviewCubit extends Cubit<TodosOverviewState> {
   TodosOverviewCubit({
     required TodosRepository todosRepository,
   })  : _todosRepository = todosRepository,
-        super(const TodosOverviewInitial());
+        super(const TodosOverviewInitial()) {
+    _onSubscriptionRequested();
+  }
 
   final TodosRepository _todosRepository;
+  late final StreamSubscription<List<Todo>> _todosSubscription;
 
-  Future<void> onSubscriptionRequested(
-    Emitter<TodosOverviewState> emit,
-  ) async {
+  Future<void> _onSubscriptionRequested() async {
     emit(const TodosOverviewLoading());
 
-    await emit.forEach<List<Todo>>(
-      _todosRepository.getTodos(),
-      onData: (List<Todo> todos) => state.copyWith(
-        todos: () => todos,
-      ),
-      onError: (_, __) => const TodosOverviewFailure(),
-    );
+    _todosSubscription = _todosRepository.getTodos().listen((List<Todo> todos) {
+      emit(state.copyWith(todos: () => todos));
+    }, onError: (_) {
+      emit(const TodosOverviewFailure());
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _todosSubscription.cancel();
+    return super.close();
   }
 
   Future<void> onTodoCompletionToggled(
     Todo todo,
   ) async {
     final Todo newTodo = state.todos
-        .firstWhere((Todo todo) => todo.id == todo.id)
+        .firstWhere((t) => t.id == todo.id)
         .copyWith(isCompleted: !todo.isCompleted);
     await _todosRepository.saveTodo(newTodo);
   }

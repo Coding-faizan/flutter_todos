@@ -2,17 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nested/nested.dart';
 
 import '../../../core/routes/route_argument.dart';
 import '../../../data/models/todo.dart';
 import '../../../domain/repository/todos_repository.dart';
 import '../../../l10n/l10n.dart';
-import 'package:nested/nested.dart';
-import '../../bloc/todos_overview/todos_overview_bloc.dart';
+
+import '../../cubit/todos_overview/todos_overview_bloc.dart';
 import '../../shared_widgets/todo_list_tile.dart';
 import '../../shared_widgets/todos_overview_filter_button.dart';
 import '../../shared_widgets/todos_overview_options_button.dart';
-import '../edit_todo/edit_todo_screen.dart';
 
 class TodosOverviewPage extends StatelessWidget {
   const TodosOverviewPage({super.key});
@@ -127,7 +127,8 @@ class TodosOverviewView extends StatelessWidget {
                     },
                     onTap: () {
                       context.push(
-                          TodoDetailScreenRoute(todo: todo).uri.toString());
+                        TodoDetailScreenRoute(todo: todo).uri.toString(),
+                      );
                     },
                   );
                 },
