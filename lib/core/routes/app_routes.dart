@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../data/models/todo.dart';
 import '../../domain/repository/todos_repository.dart';
 import '../../presentation/cubit/edit_todo/edit_todo_cubit.dart';
 import '../../presentation/screens/edit_todo/edit_todo_screen.dart';
 import '../../presentation/screens/home/main_screen.dart';
+import '../../presentation/screens/splash_screen/SplashScreen.dart';
 import '../../presentation/screens/stats/stats_screen.dart';
 import '../../presentation/screens/todos_overview/todos_overview_screen.dart';
 import '../injector.dart';
@@ -29,13 +29,14 @@ class AppRoutes {
 
   static final GoRouter appRoutes = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: HomeScreenRoute.path,
+    initialLocation: SplashScreenRoute.path,
     routes: <RouteBase>[
       /// SplashScreen add later
-      // GoRoute(
-      //   path: '/',
-      //   builder: (BuildContext context, GoRouterState state) => const SplashScreen(),
-      // ),
+      GoRoute(
+        path: SplashScreenRoute.path,
+        builder: (BuildContext context, GoRouterState state) =>
+            const SplashScreen(),
+      ),
 
       StatefulShellRoute.indexedStack(
         builder: (BuildContext context, GoRouterState state,

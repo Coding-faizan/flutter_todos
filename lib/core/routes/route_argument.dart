@@ -13,6 +13,15 @@ abstract class RouteArg {
   Uri get uri;
 }
 
+class SplashScreenRoute extends RouteArg {
+  static const String path = '/';
+
+  const SplashScreenRoute() : super();
+
+  @override
+  Uri get uri => Uri(path: path);
+}
+
 class HomeScreenRoute extends RouteArg {
   static const String path = '/home';
 
