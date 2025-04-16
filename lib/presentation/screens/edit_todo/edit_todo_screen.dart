@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/todo.dart';
 import '../../../domain/repository/todos_repository.dart';
-import '../../../l10n/l10n.dart';
 import '../../cubit/edit_todo/edit_todo_cubit.dart';
+import '../../shared_widgets/localized_text.dart';
 
 class EditTodoPage extends StatelessWidget {
   const EditTodoPage({super.key});
@@ -28,7 +28,6 @@ class EditTodoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = context.l10n;
     final bool isLoading = context.select(
       (EditTodoCubit cubit) => cubit.state is EditTodoLoading,
     );
@@ -38,14 +37,11 @@ class EditTodoView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          isNewTodo
-              ? l10n.editTodoAddAppBarTitle
-              : l10n.editTodoEditAppBarTitle,
+        title: LocalizedText(
+          isNewTodo ? 'editTodoAddAppBarTitle' : 'editTodoEditAppBarTitle',
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: l10n.editTodoSaveButtonTooltip,
         shape: const ContinuousRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(32)),
         ),
@@ -74,7 +70,6 @@ class _TitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = context.l10n;
     final EditTodoState state = context.watch<EditTodoCubit>().state;
     final String hintText = state.initialTodo?.title ?? '';
     final bool isLoading = state is EditTodoLoading;
@@ -84,7 +79,7 @@ class _TitleField extends StatelessWidget {
       initialValue: state.title,
       decoration: InputDecoration(
         enabled: !isLoading,
-        labelText: l10n.editTodoTitleLabel,
+        labelText: 'editTodoTitleLabel',
         hintText: hintText,
       ),
       maxLength: 50,
@@ -104,7 +99,6 @@ class _DescriptionField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = context.l10n;
     final EditTodoState state = context.watch<EditTodoCubit>().state;
     final String hintText = state.initialTodo?.description ?? '';
     final bool isLoading = state is EditTodoLoading;
@@ -114,7 +108,7 @@ class _DescriptionField extends StatelessWidget {
       initialValue: state.description,
       decoration: InputDecoration(
         enabled: !isLoading,
-        labelText: l10n.editTodoDescriptionLabel,
+        labelText: 'editTodoDescriptionLabel',
         hintText: hintText,
       ),
       maxLength: 300,

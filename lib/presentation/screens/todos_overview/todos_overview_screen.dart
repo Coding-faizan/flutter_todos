@@ -9,9 +9,9 @@ import '../../../core/routes/extension.dart';
 import '../../../core/routes/route_argument.dart';
 import '../../../data/models/todo.dart';
 import '../../../domain/repository/todos_repository.dart';
-import '../../../l10n/l10n.dart';
 
 import '../../cubit/todos_overview/todos_overview_bloc.dart';
+import '../../shared_widgets/localized_text.dart';
 import '../../shared_widgets/todo_list_tile.dart';
 import '../../shared_widgets/todos_overview_filter_button.dart';
 import '../../shared_widgets/todos_overview_options_button.dart';
@@ -35,12 +35,9 @@ class TodosOverviewView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = context.l10n;
-    final AppConfig config = AppConfig();
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            '${l10n.todosOverviewAppBarTitle} Env: ${config.environment.name} '),
+        title: LocalizedText('todosOverviewAppBarTitle'),
         actions: const <Widget>[
           TodosOverviewFilterButton(),
           TodosOverviewOptionsButton(),
@@ -58,7 +55,7 @@ class TodosOverviewView extends StatelessWidget {
                   ..hideCurrentSnackBar()
                   ..showSnackBar(
                     SnackBar(
-                      content: Text(l10n.todosOverviewErrorSnackbarText),
+                      content: Text('todosOverviewErrorSnackbarText'),
                     ),
                   );
               }
@@ -77,13 +74,10 @@ class TodosOverviewView extends StatelessWidget {
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
                   SnackBar(
-                    content: Text(
-                      l10n.todosOverviewTodoDeletedSnackbarText(
-                        deletedTodo.title,
-                      ),
-                    ),
+                    content:
+                        LocalizedText('todosOverviewTodoDeletedSnackbarText'),
                     action: SnackBarAction(
-                      label: l10n.todosOverviewUndoDeletionButtonText,
+                      label: 'todosOverviewUndoDeletionButtonText',
                       onPressed: () {
                         messenger.hideCurrentSnackBar();
                         context
@@ -106,7 +100,7 @@ class TodosOverviewView extends StatelessWidget {
               } else {
                 return Center(
                   child: Text(
-                    l10n.todosOverviewEmptyText,
+                    'todosOverviewEmptyText',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 );

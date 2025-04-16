@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/app.dart';
 import 'core/app_bloc_observer.dart';
 import 'core/injector.dart';
+import 'core/localization.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,5 +24,5 @@ Future<void> main() async {
 
   await Injector.initialise();
 
-  runApp(const App());
+  runApp(const Localization(child: App()));
 }

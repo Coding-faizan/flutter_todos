@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,6 +37,7 @@ final class _Injector extends Injector {
   Future<void> _initialiseServices() async {
     final KiwiContainer container = KiwiContainer();
     final SharedPreferences preferences = await SharedPreferences.getInstance();
+    await EasyLocalization.ensureInitialized();
 
     container.registerSingleton<SharedPreferences>(
       (KiwiContainer c) => preferences,

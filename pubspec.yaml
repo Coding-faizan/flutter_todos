@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   bloc: ^9.0.0
+  easy_localization: ^3.0.7+1
   equatable: ^2.0.0
   flutter:
     sdk: flutter
@@ -41,8 +42,8 @@ flutter:
 
   assets:
     - assets/
-    - assets/app_icon/s
-
+    - assets/app_icon/
+    - assets/translations/
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true

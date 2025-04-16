@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/injector.dart';
 import '../../../domain/repository/todos_repository.dart';
-import '../../../l10n/l10n.dart';
+
 import '../../cubit/stats/stats_bloc.dart';
+import '../../shared_widgets/localized_text.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
@@ -25,20 +26,19 @@ class StatsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     final state = context.watch<StatsCubit>().state;
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.statsAppBarTitle),
+        title: LocalizedText('statsAppBarTitle'),
       ),
       body: Column(
         children: [
           ListTile(
             key: const Key('statsView_completedTodos_listTile'),
             leading: const Icon(Icons.check_rounded),
-            title: Text(l10n.statsCompletedTodoCountLabel),
+            title: LocalizedText('statsCompletedTodoCountLabel'),
             trailing: Text(
               '${state.completedTodos}',
               style: textTheme.headlineSmall,
@@ -47,7 +47,7 @@ class StatsView extends StatelessWidget {
           ListTile(
             key: const Key('statsView_activeTodos_listTile'),
             leading: const Icon(Icons.radio_button_unchecked_rounded),
-            title: Text(l10n.statsActiveTodoCountLabel),
+            title: LocalizedText('statsActiveTodoCountLabel'),
             trailing: Text(
               '${state.activeTodos}',
               style: textTheme.headlineSmall,

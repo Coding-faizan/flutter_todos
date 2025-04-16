@@ -1,5 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import '../l10n/l10n.dart';
 import '../theme/theme.dart';
 
 import 'routes/app_routes.dart';
@@ -19,11 +19,12 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      locale: context.locale,
       routerConfig: AppRoutes.appRoutes,
       theme: FlutterTodosTheme.light,
       darkTheme: FlutterTodosTheme.dark,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
     );
   }
 }
