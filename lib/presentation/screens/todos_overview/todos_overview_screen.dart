@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:nested/nested.dart';
 
 import '../../../core/config.dart';
@@ -41,7 +40,7 @@ class TodosOverviewView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            '${l10n.todosOverviewAppBarTitle}Environemt: ${config.environment.name}'),
+            '${l10n.todosOverviewAppBarTitle} Env: ${config.environment.name} '),
         actions: const <Widget>[
           TodosOverviewFilterButton(),
           TodosOverviewOptionsButton(),
