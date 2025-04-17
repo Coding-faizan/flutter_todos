@@ -23,6 +23,7 @@ dependencies:
   nested: ^1.0.0
 
   package_info_plus: ^8.3.0
+  reactive_forms: ^17.0.1
   rxdart: ^0.28.0
   shared_preferences: ^2.5.3
   uuid: ^4.5.1
