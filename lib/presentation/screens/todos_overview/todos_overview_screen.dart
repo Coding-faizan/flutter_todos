@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nested/nested.dart';
 
-import '../../../core/config.dart';
 import '../../../core/injector.dart';
 import '../../../core/routes/extension.dart';
 import '../../../core/routes/route_argument.dart';
@@ -74,8 +73,8 @@ class TodosOverviewView extends StatelessWidget {
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
                   SnackBar(
-                    content:
-                        LocalizedText('todosOverviewTodoDeletedSnackbarText'),
+                    content: const LocalizedText(
+                        'todosOverviewTodoDeletedSnackbarText'),
                     action: SnackBarAction(
                       label: 'todosOverviewUndoDeletionButtonText',
                       onPressed: () {

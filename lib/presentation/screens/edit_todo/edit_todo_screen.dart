@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/todo.dart';
-import '../../../domain/repository/todos_repository.dart';
 import '../../cubit/edit_todo/edit_todo_cubit.dart';
 import '../../shared_widgets/localized_text.dart';
 
