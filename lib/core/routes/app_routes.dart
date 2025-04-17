@@ -10,6 +10,7 @@ import '../../presentation/screens/splash_screen/SplashScreen.dart';
 import '../../presentation/screens/stats/stats_screen.dart';
 import '../../presentation/screens/todos_overview/todos_overview_screen.dart';
 import '../injector.dart';
+import '../logger_navigation_observer.dart';
 import 'route_argument.dart';
 
 /// ```txt
@@ -30,6 +31,9 @@ class AppRoutes {
   static final GoRouter appRoutes = GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: SplashScreenRoute.path,
+    observers: <NavigatorObserver>[
+      LoggerNavigatorObserver(),
+    ],
     routes: <RouteBase>[
       /// SplashScreen add later
       GoRoute(
