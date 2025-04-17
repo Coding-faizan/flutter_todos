@@ -7,6 +7,7 @@ import 'core/app.dart';
 import 'core/app_bloc_observer.dart';
 import 'core/injector.dart';
 import 'core/localization.dart';
+import 'core/size_util.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,5 +25,6 @@ Future<void> main() async {
 
   await Injector.initialise();
 
-  runApp(const Localization(child: App()));
+  runApp(Localization(
+      child: SizerUtils(builder: (context, orientation) => const App())));
 }

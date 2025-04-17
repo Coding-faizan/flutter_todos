@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/assets.dart';
 import '../../../core/routes/extension.dart';
 import '../../../core/routes/route_argument.dart';
+import '../../../core/size_util.dart';
 import '../../shared_widgets/assets_wigdet.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,18 +33,18 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        minimum: const EdgeInsets.symmetric(horizontal: 24),
+        minimum: EdgeInsets.symmetric(horizontal: 24.w),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const AssetImageWidget(
+              AssetImageWidget(
                 path: Assets.logo,
-                width: 200,
-                height: 200,
+                width: 200.w,
+                height: 200.w,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: LinearProgressIndicator(
                   color: Theme.of(context).colorScheme.primary,
                   backgroundColor: Theme.of(context).colorScheme.background,

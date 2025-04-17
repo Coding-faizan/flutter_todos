@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/todos_overview/todos_overview_bloc.dart';
 import '../extensions/todos_view_filter.dart';
+import 'localized_text.dart';
 
 class TodosOverviewFilterButton extends StatelessWidget {
   const TodosOverviewFilterButton({super.key});
@@ -23,17 +24,17 @@ class TodosOverviewFilterButton extends StatelessWidget {
       },
       itemBuilder: (context) {
         return [
-          PopupMenuItem(
+          const PopupMenuItem(
             value: TodosViewFilter.all,
-            child: Text('todosOverviewFilterAll'),
+            child: LocalizedText('todosOverviewFilterAll'),
           ),
           PopupMenuItem(
             value: TodosViewFilter.activeOnly,
-            child: Text('todosOverviewFilterActiveOnly'),
+            child: const LocalizedText('todosOverviewFilterActiveOnly'),
           ),
           PopupMenuItem(
             value: TodosViewFilter.completedOnly,
-            child: Text('todosOverviewFilterCompletedOnly'),
+            child: const LocalizedText('todosOverviewFilterCompletedOnly'),
           ),
         ];
       },
