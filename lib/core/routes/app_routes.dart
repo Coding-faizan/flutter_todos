@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/repository/auth_repository.dart';
 import '../../domain/repository/todos_repository.dart';
-import '../../presentation/cubit/edit_todo/edit_todo_cubit.dart';
+import '../../presentation/cubit/auth/auth_cubit.dart';
 import '../../presentation/cubit/auth/login/login_cubit.dart';
+import '../../presentation/cubit/edit_todo/edit_todo_cubit.dart';
 import '../../presentation/screens/edit_todo/edit_todo_screen.dart';
 import '../../presentation/screens/home/main_screen.dart';
 import '../../presentation/screens/login/login_screen.dart';
@@ -36,6 +38,14 @@ class AppRoutes {
     observers: <NavigatorObserver>[
       LoggerNavigatorObserver(),
     ],
+    redirect: (BuildContext context, GoRouterState state) {
+      final AuthState authState = context.read<AuthCubit>().state;
+      if (authState is AuthUnauthenticated) {
+        return LoginScreenRoute.path;
+      } else if (authState is AuthAuthenticated) {
+        return HomeScreenRoute.path;
+      }
+    },
     routes: <RouteBase>[
       /// SplashScreen add later
       GoRoute(
@@ -46,8 +56,14 @@ class AppRoutes {
 
       GoRoute(
         path: LoginScreenRoute.path,
-        builder: (BuildContext context, GoRouterState state) =>
-            const LoginScreen(),
+        builder: (BuildContext context, GoRouterState state) {
+          return BlocProvider<LoginCubit>(
+            create: (BuildContext context) => LoginCubit(
+              Injector.resolve<AuthRepository>(),
+            ),
+            child: const LoginScreen(),
+          );
+        },
       ),
 
       StatefulShellRoute.indexedStack(
