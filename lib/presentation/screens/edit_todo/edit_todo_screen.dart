@@ -34,10 +34,6 @@ class EditTodoView extends StatelessWidget {
       (EditTodoCubit cubit) => cubit.state.isNewTodo,
     );
 
-    final bool isFormValid = context.select(
-      (EditTodoCubit cubit) => cubit.state.form.valid,
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: LocalizedText(
@@ -48,9 +44,7 @@ class EditTodoView extends StatelessWidget {
         shape: const ContinuousRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(32)),
         ),
-        onPressed: isFormValid
-            ? () => context.read<EditTodoCubit>().submitted()
-            : null,
+        onPressed: () => context.read<EditTodoCubit>().submitted(),
         child: isLoading
             ? const CupertinoActivityIndicator()
             : const Icon(Icons.check_rounded),

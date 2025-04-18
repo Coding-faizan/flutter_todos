@@ -4,6 +4,7 @@ import '../../../data/models/todo.dart';
 import '../../../domain/models/enums.dart';
 import '../../../domain/models/form_control_model.dart';
 import '../../../domain/repository/todos_repository.dart';
+import '../../extensions/form_group_extension.dart';
 
 part 'edit_todo_state.dart';
 
@@ -29,6 +30,9 @@ class EditTodoCubit extends Cubit<EditTodoState> {
   final TodosRepository _todosRepository;
 
   Future<void> submitted() async {
+    if (!state.form.validateAndFocus) {
+      return;
+    }
     emit(
       EditTodoLoading(
         initialTodo: state.initialTodo,
