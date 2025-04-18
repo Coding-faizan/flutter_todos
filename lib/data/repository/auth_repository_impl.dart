@@ -15,11 +15,13 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<void> login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     await Future<void>.delayed(const Duration(seconds: 1));
     if (password == 'admin') {
       _controller.add(AuthStatus.authenticated);
+      return true;
     }
+    return false;
   }
 
   @override
