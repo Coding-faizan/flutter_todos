@@ -46,6 +46,20 @@ class TextFormFieldWidget<T> extends StatelessWidget {
         hint: 'description',
         validationMessages: FormControlModel.description().validationMessages,
       );
+  factory TextFormFieldWidget.email() => TextFormFieldWidget<T>(
+        controlName: FormControlName.email,
+        label: 'email',
+        hint: 'email',
+        validationMessages: FormControlModel.email().validationMessages,
+      );
+
+  factory TextFormFieldWidget.password() => TextFormFieldWidget<T>(
+        controlName: FormControlName.password,
+        label: 'password',
+        hint: 'password',
+        obscureText: true,
+        validationMessages: FormControlModel.password().validationMessages,
+      );
 
   @override
   Widget build(BuildContext context) {

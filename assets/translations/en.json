@@ -1,4 +1,5 @@
 {
+  "login": "Login",
   "counterAppBarTitle": "Counter",
   "todosOverviewAppBarTitle": "Todos",
   "todosOverviewFilterTooltip": "Filter",
