@@ -3,7 +3,9 @@ import 'package:kiwi/kiwi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/datasource/local/local_storage_todos_api.dart';
+import '../data/repository/repository.dart';
 import '../data/repository/todos_api.dart';
+import '../domain/repository/auth_repository.dart';
 import '../domain/repository/todos_repository.dart';
 
 abstract base class Injector {
@@ -60,5 +62,8 @@ final class _Injector extends Injector {
     container.registerSingleton<TodosRepository>(
       (KiwiContainer c) => TodosRepository(todosApi: c<TodosApi>()),
     );
+
+    container.registerSingleton<AuthRepository>(
+        (KiwiContainer c) => AuthRepositoryImpl());
   }
 }
