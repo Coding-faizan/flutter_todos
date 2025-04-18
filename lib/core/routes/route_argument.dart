@@ -22,6 +22,15 @@ class SplashScreenRoute extends RouteArg {
   Uri get uri => Uri(path: path);
 }
 
+class LoginScreenRoute extends RouteArg {
+  static const String path = '/login';
+
+  const LoginScreenRoute() : super();
+
+  @override
+  Uri get uri => Uri(path: path);
+}
+
 class HomeScreenRoute extends RouteArg {
   static const String path = '/home';
 
