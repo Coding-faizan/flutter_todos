@@ -8,6 +8,8 @@ import 'core/app_bloc_observer.dart';
 import 'core/injector.dart';
 import 'core/localization.dart';
 import 'core/size_util.dart';
+import 'domain/repository/auth_repository.dart';
+import 'presentation/cubit/auth/auth_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +27,16 @@ Future<void> main() async {
 
   await Injector.initialise();
 
-  runApp(Localization(
-      child: SizerUtils(builder: (context, orientation) => const App())));
+  runApp(
+    Localization(
+      child: SizerUtils(
+        builder: (BuildContext context, Orientation orientation) =>
+            MultiBlocProvider(providers: [
+          BlocProvider<AuthCubit>(
+              create: (BuildContext context) =>
+                  AuthCubit(authRepository: Injector.resolve<AuthRepository>()))
+        ], child: const App()),
+      ),
+    ),
+  );
 }
