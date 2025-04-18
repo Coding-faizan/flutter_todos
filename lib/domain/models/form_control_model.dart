@@ -29,4 +29,24 @@ class FormControlModel {
               'Description should be at least 3 characters',
         },
       );
+  factory FormControlModel.email({String? value}) => FormControlModel(
+        control: FormControl<String>(
+          validators: [Validators.required, Validators.email],
+          value: value,
+        ),
+        validationMessages: {
+          ValidationMessage.required: (_) => 'Email required',
+          ValidationMessage.email: (_) => 'Invalid Email',
+        },
+      );
+
+  factory FormControlModel.password({String? value}) => FormControlModel(
+        control: FormControl<String>(
+          validators: [Validators.required],
+          value: value,
+        ),
+        validationMessages: {
+          ValidationMessage.required: (_) => 'Password required',
+        },
+      );
 }
