@@ -17,6 +17,5 @@ class AuthUnauthenticated extends AuthState {
 }
 
 class AuthAuthenticated extends AuthState {
-  final String token;
-  const AuthAuthenticated({required this.token});
+  const AuthAuthenticated();
 }

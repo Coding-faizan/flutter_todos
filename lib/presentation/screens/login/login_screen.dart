@@ -91,7 +91,11 @@ class LoginForm extends StatelessWidget {
           // Phone input
           TextFormFieldWidget.email(),
           SizedBox(height: 32.h),
+
+          TextFormFieldWidget.password(),
           // Login button
+          SizedBox(height: 32.h),
+
           PrimaryButtonWidget(
             text: 'login',
             loading: state is LoginLoading,
