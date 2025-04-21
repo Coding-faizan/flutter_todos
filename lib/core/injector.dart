@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/datasource/local/local_storage_todos_api.dart';
 import '../data/repository/repository.dart';
-import '../data/repository/todos_api.dart';
 import '../domain/repository/auth_repository.dart';
 import '../domain/repository/todos_repository.dart';
+import '../firebase_options.dart';
 
 abstract base class Injector {
   // maybe pass config
@@ -40,10 +42,23 @@ final class _Injector extends Injector {
     final KiwiContainer container = KiwiContainer();
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     await EasyLocalization.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
     container.registerSingleton<SharedPreferences>(
       (KiwiContainer c) => preferences,
     );
+
+    container.registerSingleton(
+      (KiwiContainer c) => FirebaseAuth.instance,
+    );
+    // container.registerSingleton(
+    //   (c) => FirebaseFirestore.instance,
+    // );
+    // container.registerSingleton(
+    //   (c) => FirebaseStorage.instance,
+    // );
   }
 
   @override
@@ -63,7 +78,7 @@ final class _Injector extends Injector {
       (KiwiContainer c) => TodosRepository(todosApi: c<TodosApi>()),
     );
 
-    container.registerSingleton<AuthRepository>(
-        (KiwiContainer c) => AuthRepositoryImpl());
+    container.registerSingleton<AuthRepository>((KiwiContainer c) =>
+        AuthRepositoryImpl(firebaseAuth: c<FirebaseAuth>()));
   }
 }
