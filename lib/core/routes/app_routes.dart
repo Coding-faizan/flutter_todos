@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/models/enums.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../../domain/repository/todos_repository.dart';
 import '../../presentation/cubit/auth/auth_cubit.dart';
@@ -40,10 +41,19 @@ class AppRoutes {
     ],
     redirect: (BuildContext context, GoRouterState state) {
       final AuthState authState = context.read<AuthCubit>().state;
-      if (authState is AuthUnauthenticated) {
-        return LoginScreenRoute.path;
-      } else if (authState is AuthAuthenticated) {
-        return HomeScreenRoute.path;
+      final bool isLoginRoute = state.matchedLocation == LoginScreenRoute.path;
+
+      switch (authState) {
+        case AuthInitial():
+          return SplashScreenRoute.path;
+        case AuthAuthenticated():
+          final bool isAuthRoute = isLoginRoute;
+          if (isAuthRoute) {
+            return HomeScreenRoute.path;
+          }
+          return null;
+        case AuthUnauthenticated():
+          return LoginScreenRoute.path;
       }
     },
     routes: <RouteBase>[

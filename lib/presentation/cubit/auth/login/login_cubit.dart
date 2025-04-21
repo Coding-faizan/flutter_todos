@@ -25,7 +25,7 @@ class LoginCubit extends Cubit<LoginState> {
           state.form.value['email'].toString(),
           state.form.value['password'].toString());
       if (result) {
-        LoginSuccess(form: state.form);
+        emit(LoginSuccess(form: state.form));
       } else {
         throw Exception('Invalid Credentials');
       }

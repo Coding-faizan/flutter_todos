@@ -71,8 +71,8 @@ class LoginForm extends StatelessWidget {
           Center(
             child: AssetImageWidget(
               path: Assets.logo,
-              width: 350.w,
-              height: 350.h,
+              width: 250.w,
+              height: 250.h,
             ),
           ),
           SizedBox(height: 32.h),
