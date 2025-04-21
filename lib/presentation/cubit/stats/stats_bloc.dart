@@ -3,18 +3,18 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 
 import '../../../data/models/todo.dart';
-import '../../../domain/repository/todos_repository.dart';
+import '../../../data/repository/todos_repository_impl.dart';
 part 'stats_state.dart';
 
 class StatsCubit extends Cubit<StatsState> {
   StatsCubit({
-    required TodosRepository todosRepository,
+    required TodosRepositoryImpl todosRepository,
   })  : _todosRepository = todosRepository,
         super(const StatsInitial()) {
     _onSubscriptionRequested();
   }
 
-  final TodosRepository _todosRepository;
+  final TodosRepositoryImpl _todosRepository;
   late final StreamSubscription<List<Todo>> _todosSubscription;
 
   Future<void> _onSubscriptionRequested() async {

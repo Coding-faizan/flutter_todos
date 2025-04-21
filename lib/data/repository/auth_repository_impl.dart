@@ -35,10 +35,10 @@ class AuthRepositoryImpl extends AuthRepository {
     user = credential.user;
 
     if (user == null) {
-      return true;
+      return false;
     }
 
-    return false;
+    return true;
   }
 
   @override

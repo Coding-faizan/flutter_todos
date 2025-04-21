@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/datasource/local/local_storage_todos_api.dart';
 import '../data/repository/repository.dart';
 import '../domain/repository/auth_repository.dart';
-import '../domain/repository/todos_repository.dart';
+import '../data/repository/todos_repository_impl.dart';
 import '../firebase_options.dart';
 
 abstract base class Injector {
@@ -74,11 +75,15 @@ final class _Injector extends Injector {
   Future<void> _initialiseRepositories() async {
     final KiwiContainer container = KiwiContainer();
 
-    container.registerSingleton<TodosRepository>(
-      (KiwiContainer c) => TodosRepository(todosApi: c<TodosApi>()),
+    container.registerSingleton<TodosRepositoryImpl>(
+      (KiwiContainer c) => TodosRepositoryImpl(todosApi: c<TodosApi>()),
     );
 
     container.registerSingleton<AuthRepository>((KiwiContainer c) =>
         AuthRepositoryImpl(firebaseAuth: c<FirebaseAuth>()));
+
+    container.registerSingleton(
+      (KiwiContainer c) => FirebaseFirestore.instance,
+    );
   }
 }

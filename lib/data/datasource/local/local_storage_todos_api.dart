@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../models/todo.dart' show Todo;
-import '../../repository/todos_api.dart' show TodoNotFoundException, TodosApi;
+import '../../models/todo.dart';
+import '../../../domain/repository/todos_repository.dart';
 
 /// {@template local_storage_todos_api}
 /// A Flutter implementation of the [TodosApi] that uses local storage.

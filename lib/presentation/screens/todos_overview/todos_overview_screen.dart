@@ -7,7 +7,7 @@ import '../../../core/injector.dart';
 import '../../../core/routes/extension.dart';
 import '../../../core/routes/route_argument.dart';
 import '../../../data/models/todo.dart';
-import '../../../domain/repository/todos_repository.dart';
+import '../../../data/repository/todos_repository_impl.dart';
 
 import '../../cubit/todos_overview/todos_overview_bloc.dart';
 import '../../shared_widgets/localized_text.dart';
@@ -22,7 +22,7 @@ class TodosOverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<TodosOverviewCubit>(
       create: (BuildContext context) => TodosOverviewCubit(
-        todosRepository: Injector.resolve<TodosRepository>(),
+        todosRepository: Injector.resolve<TodosRepositoryImpl>(),
       ),
       child: const TodosOverviewView(),
     );

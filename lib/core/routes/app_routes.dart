@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../domain/models/enums.dart';
 import '../../domain/repository/auth_repository.dart';
-import '../../domain/repository/todos_repository.dart';
+import '../../data/repository/todos_repository_impl.dart';
 import '../../presentation/cubit/auth/auth_cubit.dart';
 import '../../presentation/cubit/auth/login/login_cubit.dart';
 import '../../presentation/cubit/edit_todo/edit_todo_cubit.dart';
@@ -106,7 +106,7 @@ class AppRoutes {
         builder: (BuildContext context, GoRouterState state) {
           return BlocProvider<EditTodoCubit>(
             create: (BuildContext context) => EditTodoCubit(
-              todosRepository: Injector.resolve<TodosRepository>(),
+              todosRepository: Injector.resolve<TodosRepositoryImpl>(),
               initialTodo: null,
             ),
             child: const EditTodoPage(),
@@ -120,7 +120,7 @@ class AppRoutes {
               TodoDetailScreenRoute.fromState(state);
           return BlocProvider<EditTodoCubit>(
             create: (BuildContext context) => EditTodoCubit(
-              todosRepository: Injector.resolve<TodosRepository>(),
+              todosRepository: Injector.resolve<TodosRepositoryImpl>(),
               initialTodo: route.todo,
             ),
             child: const EditTodoPage(),

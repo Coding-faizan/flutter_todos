@@ -3,14 +3,14 @@ import 'package:reactive_forms/reactive_forms.dart';
 import '../../../data/models/todo.dart';
 import '../../../domain/models/enums.dart';
 import '../../../domain/models/form_control_model.dart';
-import '../../../domain/repository/todos_repository.dart';
+import '../../../data/repository/todos_repository_impl.dart';
 import '../../extensions/form_group_extension.dart';
 
 part 'edit_todo_state.dart';
 
 class EditTodoCubit extends Cubit<EditTodoState> {
   EditTodoCubit({
-    required TodosRepository todosRepository,
+    required TodosRepositoryImpl todosRepository,
     required Todo? initialTodo,
   })  : _todosRepository = todosRepository,
         super(
@@ -27,7 +27,7 @@ class EditTodoCubit extends Cubit<EditTodoState> {
           ),
         );
 
-  final TodosRepository _todosRepository;
+  final TodosRepositoryImpl _todosRepository;
 
   Future<void> submitted() async {
     if (!state.form.validateAndFocus) {
