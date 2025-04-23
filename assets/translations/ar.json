@@ -1,0 +1,23 @@
+{
+  "counterAppBarTitle": "عداد",
+  "todosOverviewAppBarTitle": "المهام",
+  "todosOverviewFilterTooltip": "تصفية",
+  "todosOverviewFilterAll": "الكل",
+  "todosOverviewFilterActiveOnly": "النشطة فقط",
+  "todosOverviewFilterCompletedOnly": "المكتملة فقط",
+  "todosOverviewOptionsTooltip": "خيارات",
+  "todosOverviewOptionsMarkAllComplete": "تحديد الكل كمكتمل",
+  "todosOverviewOptionsMarkAllIncomplete": "تحديد الكل كغير مكتمل",
+  "todosOverviewOptionsClearCompleted": "مسح المكتملة",
+  "todoDetailsAppBarTitle": "تفاصيل المهمة",
+  "todoDetailsDeleteButtonTooltip": "حذف",
+  "todoDetailsEditButtonTooltip": "تعديل",
+  "editTodoEditAppBarTitle": "تعديل المهمة",
+  "editTodoAddAppBarTitle": "إضافة مهمة",
+  "editTodoTitleLabel": "العنوان",
+  "editTodoDescriptionLabel": "الوصف",
+  "editTodoSaveButtonTooltip": "حفظ التغييرات",
+  "statsAppBarTitle": "الإحصائيات",
+  "statsCompletedTodoCountLabel": "المهام المكتملة",
+  "statsActiveTodoCountLabel": "المهام النشطة"
+}
