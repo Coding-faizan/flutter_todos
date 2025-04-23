@@ -1,16 +1,17 @@
+import '../datasource/todos_datasource.dart';
 import '../models/todo.dart';
 import '../../domain/repository/todos_repository.dart';
 
 /// {@template todos_repository}
 /// A repository that handles `todo` related requests.
 /// {@endtemplate}
-class TodosRepositoryImpl {
+class TodosRepositoryImpl implements TodosRepository {
   /// {@macro todos_repository}
   const TodosRepositoryImpl({
-    required TodosApi todosApi,
+    required TodosDatasource todosApi,
   }) : _todosApi = todosApi;
 
-  final TodosApi _todosApi;
+  final TodosDatasource _todosApi;
 
   /// Provides a [Stream] of all todos.
   Stream<List<Todo>> getTodos() => _todosApi.getTodos();
@@ -35,8 +36,7 @@ class TodosRepositoryImpl {
   ///
   /// Returns the number of updated todos.
   Future<int> completeAll({required bool isCompleted}) =>
-      _todosApi.completeAll(isCompleted: isCompleted);
+      _todosApi.completeAll(areAllCompleted: isCompleted);
 
   /// Disposes any resources managed by the repository.
-  void dispose() => _todosApi.close();
 }

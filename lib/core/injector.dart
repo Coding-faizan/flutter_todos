@@ -6,6 +6,7 @@ import 'package:kiwi/kiwi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/datasource/local/local_storage_todos_api.dart';
+import '../data/datasource/todos_datasource.dart';
 import '../data/repository/repository.dart';
 import '../domain/repository/auth_repository.dart';
 import '../data/repository/todos_repository_impl.dart';
@@ -54,9 +55,9 @@ final class _Injector extends Injector {
     container.registerSingleton(
       (KiwiContainer c) => FirebaseAuth.instance,
     );
-    // container.registerSingleton(
-    //   (c) => FirebaseFirestore.instance,
-    // );
+    container.registerSingleton(
+      (c) => FirebaseFirestore.instance,
+    );
     // container.registerSingleton(
     //   (c) => FirebaseStorage.instance,
     // );
@@ -66,8 +67,16 @@ final class _Injector extends Injector {
   Future<void> _initialiseDatasource() async {
     final KiwiContainer container = KiwiContainer();
 
-    container.registerSingleton<TodosApi>(
-      (KiwiContainer c) => LocalStorageTodosApi(plugin: c<SharedPreferences>()),
+    // container.registerSingleton<TodosRepository>(
+    //   (KiwiContainer c) => LocalStorageTodosApi(
+    //     plugin: c<SharedPreferences>(),
+    //   ),
+    // );
+
+    container.registerSingleton<TodosDatasource>(
+      (KiwiContainer c) => TodosDatasourceImpl(
+        firestore: c<FirebaseFirestore>(),
+      ),
     );
   }
 
@@ -75,15 +84,11 @@ final class _Injector extends Injector {
   Future<void> _initialiseRepositories() async {
     final KiwiContainer container = KiwiContainer();
 
-    container.registerSingleton<TodosRepositoryImpl>(
-      (KiwiContainer c) => TodosRepositoryImpl(todosApi: c<TodosApi>()),
+    container.registerSingleton<TodosRepository>(
+      (KiwiContainer c) => TodosRepositoryImpl(todosApi: c<TodosDatasource>()),
     );
 
     container.registerSingleton<AuthRepository>((KiwiContainer c) =>
         AuthRepositoryImpl(firebaseAuth: c<FirebaseAuth>()));
-
-    container.registerSingleton(
-      (KiwiContainer c) => FirebaseFirestore.instance,
-    );
   }
 }

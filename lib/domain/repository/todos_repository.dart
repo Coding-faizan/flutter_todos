@@ -3,9 +3,9 @@ import '../../data/models/todo.dart';
 /// {@template todos_api}
 /// The interface for an API that provides access to a list of todos.
 /// {@endtemplate}
-abstract class TodosApi {
+abstract class TodosRepository {
   /// {@macro todos_api}
-  const TodosApi();
+  const TodosRepository();
 
   /// Provides a [Stream] of all todos.
   Stream<List<Todo>> getTodos();
@@ -32,7 +32,6 @@ abstract class TodosApi {
   Future<int> completeAll({required bool isCompleted});
 
   /// Closes the client and frees up any resources.
-  Future<void> close();
 }
 
 /// Error thrown when a [Todo] with a given id is not found.
