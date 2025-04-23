@@ -16,7 +16,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         key: const Key('homeView_addTodo_floatingActionButton'),
@@ -34,6 +34,10 @@ class MainScreen extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart),
             label: 'Stats',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
       ),
