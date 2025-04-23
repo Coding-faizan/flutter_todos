@@ -45,7 +45,9 @@ class EditTodoView extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(32)),
         ),
         onPressed: () => context.read<EditTodoCubit>().submitted(),
-        child: isLoading
+        child: context.select(
+          (EditTodoCubit cubit) => cubit.state is EditTodoLoading,
+        )
             ? const CupertinoActivityIndicator()
             : const Icon(Icons.check_rounded),
       ),
@@ -58,6 +60,7 @@ class EditTodoView extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   TextFormFieldWidget.title(),
+                  SizedBox(height: 16),
                   TextFormFieldWidget.description(),
                 ],
               ),
