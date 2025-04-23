@@ -1,16 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import '../../../core/logger.dart';
 import '../../../data/models/todo.dart';
 import '../../../domain/models/enums.dart';
 import '../../../domain/models/form_control_model.dart';
-import '../../../data/repository/todos_repository_impl.dart';
+import '../../../domain/repository/todos_repository.dart';
 import '../../extensions/form_group_extension.dart';
 
 part 'edit_todo_state.dart';
 
 class EditTodoCubit extends Cubit<EditTodoState> {
   EditTodoCubit({
-    required TodosRepositoryImpl todosRepository,
+    required TodosRepository todosRepository,
     required Todo? initialTodo,
   })  : _todosRepository = todosRepository,
         super(
@@ -27,7 +28,7 @@ class EditTodoCubit extends Cubit<EditTodoState> {
           ),
         );
 
-  final TodosRepositoryImpl _todosRepository;
+  final TodosRepository _todosRepository;
 
   Future<void> submitted() async {
     if (!state.form.validateAndFocus) {
@@ -56,6 +57,16 @@ class EditTodoCubit extends Cubit<EditTodoState> {
     } catch (e) {
       emit(
         EditTodoFailure(
+          initialTodo: state.initialTodo,
+          form: state.form,
+        ),
+      );
+      println(
+        'Error saving todo: ${e.toString()}',
+      );
+    } finally {
+      emit(
+        EditTodoInitial(
           initialTodo: state.initialTodo,
           form: state.form,
         ),

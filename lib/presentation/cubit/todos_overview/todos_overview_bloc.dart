@@ -4,19 +4,20 @@ import 'package:bloc/bloc.dart';
 
 import '../../../data/models/todo.dart';
 import '../../../data/repository/todos_repository_impl.dart';
+import '../../../domain/repository/todos_repository.dart';
 import '../../extensions/todos_view_filter.dart';
 
 part 'todos_overview_state.dart';
 
 class TodosOverviewCubit extends Cubit<TodosOverviewState> {
   TodosOverviewCubit({
-    required TodosRepositoryImpl todosRepository,
+    required TodosRepository todosRepository,
   })  : _todosRepository = todosRepository,
         super(const TodosOverviewInitial()) {
     _onSubscriptionRequested();
   }
 
-  final TodosRepositoryImpl _todosRepository;
+  final TodosRepository _todosRepository;
   late final StreamSubscription<List<Todo>> _todosSubscription;
 
   Future<void> _onSubscriptionRequested() async {
