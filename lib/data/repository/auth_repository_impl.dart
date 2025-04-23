@@ -43,11 +43,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<void> signOut() async {
-    await _firebaseAuth.signOut();
-  }
-
-  @override
-  void logout() {
     _controller.add(AuthStatus.unauthenticated);
+    await _firebaseAuth.signOut();
   }
 }

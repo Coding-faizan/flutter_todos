@@ -25,7 +25,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void logout() {
-    _authRepository.logout();
+    _authRepository.signOut();
     emit(const AuthUnauthenticated());
   }
 
