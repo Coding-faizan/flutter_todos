@@ -5,12 +5,14 @@ import 'package:go_router/go_router.dart';
 import '../../domain/models/enums.dart';
 import '../../domain/repository/auth_repository.dart';
 import '../../data/repository/todos_repository_impl.dart';
+import '../../domain/repository/todos_repository.dart';
 import '../../presentation/cubit/auth/auth_cubit.dart';
 import '../../presentation/cubit/auth/login/login_cubit.dart';
 import '../../presentation/cubit/edit_todo/edit_todo_cubit.dart';
 import '../../presentation/screens/edit_todo/edit_todo_screen.dart';
 import '../../presentation/screens/home/main_screen.dart';
 import '../../presentation/screens/login/login_screen.dart';
+import '../../presentation/screens/profile/profile_page.dart';
 import '../../presentation/screens/splash_screen/SplashScreen.dart';
 import '../../presentation/screens/stats/stats_screen.dart';
 import '../../presentation/screens/todos_overview/todos_overview_screen.dart';
@@ -99,6 +101,12 @@ class AppRoutes {
                       const StatsPage()),
             ],
           ),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: ProfileScreenRoute.path,
+                builder: (BuildContext context, GoRouterState state) =>
+                    const ProfilePage())
+          ])
         ],
       ),
       GoRoute(
@@ -106,7 +114,7 @@ class AppRoutes {
         builder: (BuildContext context, GoRouterState state) {
           return BlocProvider<EditTodoCubit>(
             create: (BuildContext context) => EditTodoCubit(
-              todosRepository: Injector.resolve<TodosRepositoryImpl>(),
+              todosRepository: Injector.resolve<TodosRepository>(),
               initialTodo: null,
             ),
             child: const EditTodoPage(),
@@ -120,7 +128,7 @@ class AppRoutes {
               TodoDetailScreenRoute.fromState(state);
           return BlocProvider<EditTodoCubit>(
             create: (BuildContext context) => EditTodoCubit(
-              todosRepository: Injector.resolve<TodosRepositoryImpl>(),
+              todosRepository: Injector.resolve<TodosRepository>(),
               initialTodo: route.todo,
             ),
             child: const EditTodoPage(),

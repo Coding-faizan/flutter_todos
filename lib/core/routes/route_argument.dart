@@ -75,3 +75,12 @@ class TodoDetailScreenRoute extends RouteArg {
   @override
   Uri get uri => Uri(path: path);
 }
+
+class ProfileScreenRoute extends RouteArg {
+  static const String path = '/profile';
+
+  const ProfileScreenRoute() : super();
+
+  @override
+  Uri get uri => Uri(path: path);
+}
