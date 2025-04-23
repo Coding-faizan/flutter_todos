@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/todos_overview/todos_overview_bloc.dart';
+import 'localized_text.dart';
 
 @visibleForTesting
 enum TodosOverviewOption { toggleAll, clearCompleted }
@@ -33,7 +34,7 @@ class TodosOverviewOptionsButton extends StatelessWidget {
           PopupMenuItem(
             value: TodosOverviewOption.toggleAll,
             enabled: hasTodos,
-            child: Text(
+            child: LocalizedText(
               completedTodosAmount == todos.length
                   ? 'todosOverviewOptionsMarkAllIncomplete'
                   : 'todosOverviewOptionsMarkAllComplete',
@@ -42,7 +43,7 @@ class TodosOverviewOptionsButton extends StatelessWidget {
           PopupMenuItem(
             value: TodosOverviewOption.clearCompleted,
             enabled: hasTodos && completedTodosAmount > 0,
-            child: Text('todosOverviewOptionsClearCompleted'),
+            child: LocalizedText('todosOverviewOptionsClearCompleted'),
           ),
         ];
       },

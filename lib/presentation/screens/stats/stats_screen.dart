@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/injector.dart';
 import '../../../data/repository/todos_repository_impl.dart';
 
+import '../../../domain/repository/todos_repository.dart';
 import '../../cubit/stats/stats_bloc.dart';
 import '../../shared_widgets/localized_text.dart';
 
@@ -14,7 +15,7 @@ class StatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => StatsCubit(
-        todosRepository: Injector.resolve<TodosRepositoryImpl>(),
+        todosRepository: Injector.resolve<TodosRepository>(),
       ),
       child: const StatsView(),
     );
