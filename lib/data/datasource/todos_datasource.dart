@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../core/logger.dart';
 import '../models/todo.dart';
 
 abstract class TodosDatasource {

@@ -10,6 +10,7 @@ import 'core/localization.dart';
 import 'core/size_util.dart';
 import 'domain/repository/auth_repository.dart';
 import 'presentation/cubit/auth/auth_cubit.dart';
+import 'presentation/service/remote_config.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
