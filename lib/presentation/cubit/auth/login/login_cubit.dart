@@ -22,8 +22,8 @@ class LoginCubit extends Cubit<LoginState> {
 
     try {
       final bool result = await _authRepository.login(
-          state.form.value['email'].toString(),
-          state.form.value['password'].toString());
+          state.form.control(FormControlName.email.name).value.toString(),
+          state.form.control(FormControlName.password.name).value.toString());
       if (result) {
         emit(LoginSuccess(form: state.form));
       } else {

@@ -74,10 +74,11 @@ class TodosDatasourceImpl implements TodosDatasource {
 
     for (final todo in todos) {
       final data = todo.data();
-      final currentStatus = data['isCompleted'] ?? false;
+      final currentTodo = Todo.fromJson(data);
 
-      if (currentStatus != areAllCompleted) {
-        updates.add(todo.reference.update({'isCompleted': areAllCompleted}));
+      if (currentTodo.isCompleted != areAllCompleted) {
+        final updatedTodo = currentTodo.copyWith(isCompleted: areAllCompleted);
+        updates.add(todo.reference.set(updatedTodo.toJson()));
       }
     }
 
