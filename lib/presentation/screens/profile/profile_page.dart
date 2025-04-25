@@ -29,7 +29,7 @@ class ProfilePage extends StatelessWidget {
               children: <Widget>[
                 ElevatedButton(
                   onPressed: () {
-                    context.read<AuthCubit>().logout();
+                    throw Exception('Test Crash');
                   },
                   child: const Text('Sign Out'),
                 ),

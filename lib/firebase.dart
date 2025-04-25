@@ -14,7 +14,9 @@ abstract class FirebaseService {
       final options = PlatformInfo().options;
       return _ProdFirebaseService(options: options);
     }
-    return _StagingFirebaseService();
+    final options = PlatformInfo().options;
+
+    return _StagingFirebaseService(options: options);
   }
 }
 
@@ -25,13 +27,19 @@ class _ProdFirebaseService implements FirebaseService {
 
   @override
   Future<void> initialise() async {
-    await Firebase.initializeApp(name: '[DEFAULT]', options: options);
+    //await Firebase.initializeApp(name: '[DEFAULT]', options: options);
   }
 }
 
 class _StagingFirebaseService implements FirebaseService {
+  FirebaseOptions options;
+
+  _StagingFirebaseService({required this.options});
+
   @override
-  Future<void> initialise() async {}
+  Future<void> initialise() async {
+    await Firebase.initializeApp(name: '[DEFAULT]', options: options);
+  }
 }
 
 abstract class ReportingService {
@@ -50,6 +58,40 @@ abstract class ReportingService {
 }
 
 class _ProdReportingService implements ReportingService {
+  final FlutterExceptionHandler _recordFlutterFatalError =
+      FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+  @override
+  Future<void> initialise() async {
+    FlutterError.onError = _recordFlutterFatalError;
+    PlatformDispatcher.instance.onError = recordError;
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  }
+
+  @override
+  void recordFlutterFatalError(FlutterErrorDetails details) {
+    _recordFlutterFatalError.call(details);
+  }
+
+  @override
+  bool recordError(Object exception, StackTrace stackTrace) {
+    FirebaseCrashlytics.instance.recordError(exception, stackTrace);
+    return true;
+  }
+
+  @override
+  Future<bool> enableReporting(bool enable) async {
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enable);
+    return enable;
+  }
+
+  @override
+  Future<void> test() async {
+    throw Exception('Test exception');
+  }
+}
+
+class _StagingReportingService implements ReportingService {
   final FlutterExceptionHandler _recordFlutterFatalError =
       FirebaseCrashlytics.instance.recordFlutterError;
 
@@ -83,27 +125,6 @@ class _ProdReportingService implements ReportingService {
   }
 }
 
-class _StagingReportingService implements ReportingService {
-  @override
-  Future<void> initialise() async {}
-
-  @override
-  void recordFlutterFatalError(FlutterErrorDetails details) {}
-
-  @override
-  bool recordError(Object exception, StackTrace stackTrace) {
-    return true;
-  }
-
-  @override
-  Future<bool> enableReporting(bool enable) async {
-    return false;
-  }
-
-  @override
-  Future<void> test() async {}
-}
-
 abstract class AnalyticsService {
   Future<void> initialise();
   Future<void> logEvent(String name, Map<String, Object>? parameters);
@@ -120,7 +141,7 @@ abstract class AnalyticsService {
 class _ProdAnalyticsService implements AnalyticsService {
   @override
   Future<void> initialise() async {
-    FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+    await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   }
 
   @override
@@ -138,13 +159,19 @@ class _ProdAnalyticsService implements AnalyticsService {
 
 class _StagingAnalyticsService implements AnalyticsService {
   @override
-  Future<void> initialise() async {}
+  Future<void> initialise() async {
+    await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+  }
 
   @override
-  Future<void> logEvent(String name, Map<String, Object>? parameters) async {}
+  Future<void> logEvent(String name, Map<String, Object>? parameters) async {
+    await FirebaseAnalytics.instance
+        .logEvent(name: name, parameters: parameters);
+  }
 
   @override
   Future<bool> enableAnalytics(bool enable) async {
-    return false;
+    await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+    return enable;
   }
 }
