@@ -3,8 +3,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/routes/extension.dart';
 import '../../../core/routes/route_argument.dart';
+import '../../service/remote_config.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
 
   const MainScreen({
@@ -13,9 +14,20 @@ class MainScreen extends StatelessWidget {
   });
 
   @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    super.initState();
+    ForceAppUpdate.enforcedVersion(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: navigationShell,
+      body: widget.navigationShell,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
@@ -24,8 +36,8 @@ class MainScreen extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationShell.currentIndex,
-        onTap: (int index) => navigationShell.goBranch(index),
+        currentIndex: widget.navigationShell.currentIndex,
+        onTap: (int index) => widget.navigationShell.goBranch(index),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

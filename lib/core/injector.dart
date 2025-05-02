@@ -10,6 +10,7 @@ import '../data/datasource/todos_datasource.dart';
 import '../data/repository/repository.dart';
 import '../domain/repository/auth_repository.dart';
 import '../data/repository/todos_repository_impl.dart';
+import '../firebase.dart';
 import '../firebase_options.dart';
 
 abstract base class Injector {
@@ -34,9 +35,9 @@ abstract base class Injector {
 final class _Injector extends Injector {
   @override
   Future<void> _initialise() async {
+    await _initialiseServices();
     await _initialiseDatasource();
     await _initialiseRepositories();
-    await _initialiseServices();
   }
 
   @override
@@ -47,6 +48,9 @@ final class _Injector extends Injector {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    await FirebaseService().initialise();
+    await ReportingService().initialise();
+    await AnalyticsService().initialise();
 
     container.registerSingleton<SharedPreferences>(
       (KiwiContainer c) => preferences,
@@ -58,9 +62,6 @@ final class _Injector extends Injector {
     container.registerSingleton(
       (c) => FirebaseFirestore.instance,
     );
-    // container.registerSingleton(
-    //   (c) => FirebaseStorage.instance,
-    // );
   }
 
   @override

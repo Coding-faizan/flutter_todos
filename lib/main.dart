@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,9 @@ import 'core/injector.dart';
 import 'core/localization.dart';
 import 'core/size_util.dart';
 import 'domain/repository/auth_repository.dart';
+import 'firebase.dart';
 import 'presentation/cubit/auth/auth_cubit.dart';
+import 'presentation/service/remote_config.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +30,8 @@ Future<void> main() async {
 
   await Injector.initialise();
 
+  FlutterError.onError = ReportingService()
+      .recordFlutterFatalError; // Use the custom error handler
   runApp(
     Localization(
       child: SizerUtils(

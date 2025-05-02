@@ -42,8 +42,9 @@ class EditTodoCubit extends Cubit<EditTodoState> {
     );
 
     final Todo todo = (state.initialTodo ?? Todo(title: '')).copyWith(
-      title: state.form.value['title'].toString(),
-      description: state.form.value['description'].toString(),
+      title: state.form.control(FormControlName.title.name).value.toString(),
+      description:
+          state.form.control(FormControlName.description.name).value.toString(),
     );
 
     try {

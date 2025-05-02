@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../domain/models/enums.dart';
 import '../../domain/repository/auth_repository.dart';
-import '../../data/repository/todos_repository_impl.dart';
 import '../../domain/repository/todos_repository.dart';
 import '../../presentation/cubit/auth/auth_cubit.dart';
 import '../../presentation/cubit/auth/login/login_cubit.dart';
@@ -16,8 +13,10 @@ import '../../presentation/screens/profile/profile_page.dart';
 import '../../presentation/screens/splash_screen/SplashScreen.dart';
 import '../../presentation/screens/stats/stats_screen.dart';
 import '../../presentation/screens/todos_overview/todos_overview_screen.dart';
+import '../../presentation/service/navigator.dart';
 import '../injector.dart';
-import '../logger_navigation_observer.dart';
+
+//import '../logger_navigation_observer.dart';
 import 'route_argument.dart';
 
 /// ```txt
